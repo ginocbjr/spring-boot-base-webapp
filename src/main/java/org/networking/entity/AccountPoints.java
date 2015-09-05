@@ -11,12 +11,12 @@ import javax.persistence.Table;
  * Created by Jona on 9/05/2015.
  */
 @Entity
-@Table(name = "MEMBER_POINTS")
-public class MemberPoints extends BaseEntity{
+@Table(name = "ACCOUNT_POINTS")
+public class AccountPoints extends BaseEntity{
 
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="MEMBER_ID")
-	private Member member;
+	@JoinColumn(name="ACCOUNT_ID")
+	private Account account;
 	
 	@Column(name="POINTS")
 	private Long points;
@@ -24,10 +24,6 @@ public class MemberPoints extends BaseEntity{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="POINT_TYPE")
 	private PointType pointType;
-
-	public Member getMember() {
-		return member;
-	}
 
 	public Long getPoints() {
 		return points;
@@ -37,16 +33,20 @@ public class MemberPoints extends BaseEntity{
 		return pointType;
 	}
 
-	public void setMember(Member member) {
-		this.member = member;
-	}
-
 	public void setPoints(Long points) {
 		this.points = points;
 	}
 
 	public void setPointType(PointType pointType) {
 		this.pointType = pointType;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 	
 }
