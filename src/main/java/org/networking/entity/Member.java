@@ -18,13 +18,13 @@ import javax.persistence.Table;
 @Table(name = "MEMBER")
 public class Member extends User{
 
-	@OneToMany(mappedBy="account", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Account> accounts;
 	
 	@Column(name="DATE_JOINED")
 	private Date dateJoined;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "referrer")
+	@OneToOne(cascade = CascadeType.ALL)
 	private Member referrer;
 	
 	@Column(name="AGE")

@@ -19,7 +19,7 @@ public class Account extends BaseEntity {
 	@Column(name = "DATE_ACTIVATED")
 	private Date dateActivated;
 
-	@Column(name = "CREATEDATE")
+	@Column(name = "TOTAL_POINTS")
 	private Double totalPoints;
 
 	@ManyToOne(fetch = FetchType.LAZY)
