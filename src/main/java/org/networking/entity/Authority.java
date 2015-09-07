@@ -1,6 +1,12 @@
 package org.networking.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.networking.entity.User.Role;
 
 /**
  * Created by Gino on 8/29/2015.
@@ -15,6 +21,11 @@ public class Authority extends BaseEntity {
 
     @Column
     private String role;
+    
+    public Authority(User user, Role role) {
+    	this.user = user;
+    	this.role = role.toString();
+    }
 
     public User getUser() {
         return user;

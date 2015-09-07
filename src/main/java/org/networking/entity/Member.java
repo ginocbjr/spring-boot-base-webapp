@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * Created by Jona on 9/05/2015.
@@ -47,6 +48,12 @@ public class Member extends User{
 	
 	@Column(name="ADDRESS")
 	private String address;
+	
+	@Column(name="CITY")
+	private String city;
+	
+	@Transient
+	private String numOfAccounts;
 
 	public List<Account> getAccounts() {
 		return accounts;
@@ -128,5 +135,24 @@ public class Member extends User{
 		this.address = address;
 	}
 	
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getNumOfAccounts() {
+		return numOfAccounts;
+	}
+
+	public void setNumOfAccounts(String numOfAccounts) {
+		this.numOfAccounts = numOfAccounts;
+	}
+
+	/*public String toString() {
+        return "Member(Username: " + this.getUsername() + ", FirstName: " + this.getFirstName() + ")";
+    }*/
 
 }

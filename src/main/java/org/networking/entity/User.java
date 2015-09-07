@@ -1,7 +1,18 @@
 package org.networking.entity;
 
-import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  * Created by Gino on 8/28/2015.
@@ -9,23 +20,27 @@ import java.util.Date;
 @Entity
 @Table(name = "USER")
 public class User extends BaseEntity {
-
-    @Column(nullable = false, unique = true)
+	
+	public enum Role {
+		USER, ADMIN;
+	}
+	
+    @Column(name="USERNAME", nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(name="FIRST_NAME", nullable = false)
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(name="LAST_NAME", nullable = false)
     private String lastName;
 
-    @Column
+    @Column(name="MIDDLE_NAME")
     private String middleName;
 
-    @Column(nullable = false, unique = true)
+    @Column(name="EMAIL")
     private String email;
 
-    @Column(nullable = false)
+    @Column(name="PASSWORD", nullable = false)
     private String password;
 
     /**
@@ -33,10 +48,16 @@ public class User extends BaseEntity {
      */
     @Transient
     private String oldPassword;
+    
+    @Transient
+    private String newPassword;
 
     @Column
     @Temporal(TemporalType.DATE)
     private Date birthDate;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<Authority> authorities;
 
     public String getUsername() {
         return username;
@@ -101,4 +122,27 @@ public class User extends BaseEntity {
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
+    
+    public void grantRole(Role role) {
+        if (authorities == null) {
+            authorities = new HashSet<Authority>();
+        }
+        authorities.add(new Authority(this, role));
+    }
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
+	public Set<Authority> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(Set<Authority> authorities) {
+		this.authorities = authorities;
+	}
 }

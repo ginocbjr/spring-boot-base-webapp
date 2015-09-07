@@ -4,6 +4,11 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
     font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
     background: url('../images/dbloc-bg.jpg') no-repeat center center fixed;
@@ -11,6 +16,7 @@ body {
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
+    margin: 0 0 40px; /* bottom = footer height */
 }
 
 h1,
@@ -133,16 +139,20 @@ hr {
 footer {
     background-image: linear-gradient(rgb(255, 252, 197), rgb(248, 233, 140));
     font-size: 0.75em;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
 
-footer.product-info-page,
+/* footer.product-info-page,
 footer.fixed {
 	position: fixed;
 	bottom: 0px;
 	left: 0px;
 	width: 100%;
 }
-
+ */
 footer p {
     margin: 0;
     padding: 10px 0;
@@ -307,6 +317,16 @@ input.money {
     margin-bottom: 0 !important;
 }
 
+.content-box:after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+.date-group {
+	padding: 0 15px !important;
+}
+
 @media screen and (min-width:768px) {
     .brand {
         display: inherit;
@@ -345,12 +365,6 @@ input.money {
 
 @media screen and (min-width:1200px) {
     .box:after {
-        content: '';
-        display: table;
-        clear: both;
-    }
-
-    .content-box:after {
         content: '';
         display: table;
         clear: both;

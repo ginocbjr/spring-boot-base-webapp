@@ -49,11 +49,6 @@ public class HomeController {
         return "product-3";
     }
     
-    @RequestMapping("/members")
-    String members() {
-        return "member-list";
-    }
-    
     @RequestMapping("/order")
     String order() {
         return "admin-order";

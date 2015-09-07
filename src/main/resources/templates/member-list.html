@@ -1,67 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<head>
-
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
-
-    <title>DBLOC-IBS Members</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="css/font-awesome.min.css" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
-    <link href="css/style.css" rel="stylesheet"/>
-    <link href="css/select2.css" rel="stylesheet"/>
-    <link href="css/select2-bootstrap.css" rel="stylesheet"/>
-
-    <!-- Fonts -->
-    <!-- <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css"/>
-    <link href="http://fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600,700,100italic,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css"/> -->
-	
-	<link rel="icon" type="image/png" href="images/dbloc-logo-mini.png" />
-</head>
+<!-- Header Fragment -->
+<head th:replace="fragments/header :: header(pageTitle='DBLOC IBS - Members')"></head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-fixed-top topnav home-main-menu" role="navigation">
-        <div class="container topnav">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <div><img id="navbar-logo-img" class="img-responsive" src="images/dbloc-logo-mini.png" alt="" style="padding-top: 4px; padding-left: 5px;"></img></div>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#" class="home-link about-link active">Members</a>
-                    </li>
-                    <li>
-                        <a href="admin-products" class="home-link about-link">Products</a>
-                    </li>
-                    <li>
-                        <a href="order" class="home-link about-link">Order</a>
-                    </li>
-                    <li>
-                        <a href="#" class="home-link about-link">Members Earnings</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
+    <!-- Navigation Fragment -->
+    <nav th:replace="fragments/navigation :: navigation"></nav>
     
     <div class="container" style="margin-top: 70px;">
 
@@ -75,7 +20,7 @@
 
                 <div class="dbloc-table">
                     <div>
-                        <button type="button" class="btn gold-button dbloc-add" data-toggle="modal" data-target="#memberModal">
+                        <button type="button" class="btn gold-button dbloc-add" onClick="window.location.href='member-create'"> <!-- data-toggle="modal" data-target="#memberModal" -->
                            <i class="fa fa-plus"></i> Add a Member
                         </button>
                     </div>
@@ -134,17 +79,10 @@
 
     </div>
 
-    <footer class="fixed">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <p>Copyright &copy; DBLOC Infinite Business Solutions 2015</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer Fragment -->
+    <footer th:replace="fragments/footer :: footer"></footer>
     
-    <div id="memberModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Add Member" aria-hidden="true">
+    <!-- <div id="memberModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Add Member" aria-hidden="true">
         <div class="vertical-alignment-helper">
             <div class="modal-dialog vertical-align-center">
                 <div class="modal-content">
@@ -153,7 +91,14 @@
                         <h4 class="modal-title text-center">Add Member</h4>
                     </div>
                     <div class="modal-body">
-                        <form class="form-horizontal" role="form">
+                        <form class="form-horizontal" action="#" th:action="@{/member-create}" th:object="${member}" method="post">
+                        	<div class="form-group">  
+                                <label class="control-label col-xs-4">Username</label>
+                                <div class="col-xs-8">
+                                    <input type="text" th:field="*{username}" class="form-control"/>
+                                    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}">error</span>
+                                </div>
+                            </div>
                             <div class="form-group">  
                                 <label class="control-label col-xs-4">First Name</label>
                                 <div class="col-xs-8">
@@ -175,7 +120,7 @@
                             <div class="form-group">  
                                 <label class="control-label col-xs-4">Referrer Name</label>
                                 <div class="col-xs-8">
-                                    <!-- <input id="memberName" type="text" class="form-control"> -->
+                                    <input id="memberName" type="text" class="form-control">
                                     <select id="referrerName" class="form-control">
      									<option value="">Select a Member</option>
        									<option value="1">Sonny Boy</option>
@@ -190,6 +135,13 @@
                                     <input type="text" class="form-control"/>
                                 </div>
                             </div>
+                            <div class="form-group">  
+                                <label class="control-label col-xs-4">Age</label>
+                                <div class="col-xs-2">
+                                    <input type="text" class="form-control"/>
+                                </div>
+                                <button type="submit" class="btn btn-success">Save</button>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -199,7 +151,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div id="addAccounts" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Add Accounts" aria-hidden="true">
         <div class="vertical-alignment-helper">
