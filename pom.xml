@@ -33,7 +33,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -69,6 +68,24 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <url>${tomcat-admin-url}</url>
+                    <path>${app-path}</path>
+                    <username>${tomcat-admin-username}</username>
+                    <password>${tomcat-admin-password}</password>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
     
@@ -86,4 +103,16 @@
             <url>https://repo.spring.io/libs-release</url>
         </pluginRepository>
     </pluginRepositories>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <tomcat-admin-url>http://localhost/manager/text</tomcat-admin-url>
+                <app-path>/portal</app-path>
+                <tomcat-admin-username>maven</tomcat-admin-username>
+                <tomcat-admin-password>password</tomcat-admin-password>
+            </properties>
+        </profile>
+    </profiles>
 </project>
