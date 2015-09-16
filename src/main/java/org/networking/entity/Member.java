@@ -7,9 +7,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 /**
@@ -23,16 +25,24 @@ public class Member extends User{
 	private List<Account> accounts;
 	
 	@Column(name="DATE_JOINED")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateJoined;
+	
+	@Transient
+	private String dateJoinedString;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Member referrer;
 	
 	@Column(name="AGE")
 	private Integer age;
 	
 	@Column(name="BIRTH_DAY")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date birthday;
+	
+	@Transient
+	private String birthdayString;
 	
 	@Column(name="TIN")
 	private String tinNumber;
@@ -43,7 +53,7 @@ public class Member extends User{
 	@Column(name="OCCUPATION")
 	private String occupation;
 	
-	@Column(name="CIVIL_SATUS")
+	@Column(name="CIVIL_STATUS")
 	private String civilStatus;
 	
 	@Column(name="ADDRESS")
@@ -52,8 +62,11 @@ public class Member extends User{
 	@Column(name="CITY")
 	private String city;
 	
+	@Column(name="numOfAccounts")
+	private Integer numOfAccounts;
+	
 	@Transient
-	private String numOfAccounts;
+	private String tempRole;
 
 	public List<Account> getAccounts() {
 		return accounts;
@@ -143,12 +156,48 @@ public class Member extends User{
 		this.city = city;
 	}
 
-	public String getNumOfAccounts() {
+	public Integer getNumOfAccounts() {
 		return numOfAccounts;
 	}
 
-	public void setNumOfAccounts(String numOfAccounts) {
+	public void setNumOfAccounts(Integer numOfAccounts) {
 		this.numOfAccounts = numOfAccounts;
+	}
+
+	public String getBirthdayString() {
+		return birthdayString;
+	}
+
+	public void setBirthdayString(String birthdayString) {
+		this.birthdayString = birthdayString;
+	}
+
+	public String getTempRole() {
+		return tempRole;
+	}
+
+	public void setTempRole(String tempRole) {
+		this.tempRole = tempRole;
+	}
+	
+	public String getCompleteName() {
+		return this.getFirstName() + " " + this.getLastName();
+	}
+	
+	public Long getReferrerId() {
+		return this.getReferrer()!=null?this.getReferrer().getId():null;
+	}
+	
+	public String getReferrerCompleteName() {
+		return this.getReferrer()!=null?this.getReferrer().getCompleteName():null;
+	}
+
+	public String getDateJoinedString() {
+		return dateJoinedString;
+	}
+
+	public void setDateJoinedString(String dateJoinedString) {
+		this.dateJoinedString = dateJoinedString;
 	}
 
 	/*public String toString() {

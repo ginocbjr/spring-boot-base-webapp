@@ -22,6 +22,10 @@ public class Authority extends BaseEntity {
     @Column
     private String role;
     
+    public Authority() {
+        super();
+    }
+    
     public Authority(User user, Role role) {
     	this.user = user;
     	this.role = role.toString();

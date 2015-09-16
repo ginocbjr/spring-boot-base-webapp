@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -24,12 +25,14 @@ public class MemberController  {
 	private MemberValidator memberValidator;
 	
 	@RequestMapping("/members")
-    String members() {
+    public String membersPage(Model model) {
+		model.addAttribute("memberList", memberService.findAll());
         return "member-list";
     }
 	
-	@RequestMapping(value="/member-create", method=RequestMethod.GET)
-	public String index(Member member) {
+	@RequestMapping("/member-create")
+	public String memberCreatePage(Member member, Model model) {
+		model.addAttribute("memberList", memberService.findAll());
 		return "member-add";
 	}
 	
@@ -38,19 +41,21 @@ public class MemberController  {
         binder.addValidators(memberValidator);
     }
 
-    /*@RequestMapping(value="/members/view", method=RequestMethod.GET)
-    public String showForm(Member member) {
-        return "member-list";	
-    }*/
+	@RequestMapping("/member-edit/{id}")
+    public String memberEditPage(@PathVariable Long id) {
+		return "member-edit";
+    }
 
     @RequestMapping(value="/member-create", method=RequestMethod.POST)
     public String createMember(@Valid Member member, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+        	model.addAttribute("memberList", memberService.findAll());
         	return "member-add";
         } else {
         	memberService.create(member);
-        	model.addAttribute("result", "success");
-        	return "redirect:/members";
+        	//return "redirect:/members?create=true";
+        	model.addAttribute("memberCreate", "success");
+        	return "member-add";
         }
     }
 }

@@ -51,10 +51,9 @@ public class User extends BaseEntity {
     
     @Transient
     private String newPassword;
-
-    @Column
-    @Temporal(TemporalType.DATE)
-    private Date birthDate;
+    
+    @Transient
+    private String confirmPassword;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Authority> authorities;
@@ -114,14 +113,6 @@ public class User extends BaseEntity {
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
     }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
     
     public void grantRole(Role role) {
         if (authorities == null) {
@@ -144,5 +135,13 @@ public class User extends BaseEntity {
 
 	public void setAuthorities(Set<Authority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 }

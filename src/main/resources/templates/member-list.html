@@ -35,48 +35,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Sonny</td>
-                                <td>Quillopas</td>
-                                <td>5</td>
+                        	<th:block th:each="member : ${memberList}">
+                        		<tr>
+                        		<td th:text="${member.firstName}"></td>
+                                <td th:text="${member.lastName}"></td>
+                                <td th:text="${member.numOfAccounts}"></td>
                                 <td class="dbloc-controls">
-                                    <i class="fa fa-pencil edit-action" data-title="Edit"></i>
-                                    <i class="fa fa-trash-o remove-action" data-title="Delete"></i>
+                                    <i class="fa fa-pencil edit-action" data-id="${member.id}" data-title="Edit"></i>
+                                    <i class="fa fa-trash-o remove-action" data-id="${member.id}" data-title="Delete"></i>
                                 </td>
                                 <td class="dbloc-controls">
                                     <button type="button" class="btn btn-sm gold-button dbloc-add-account" data-toggle="modal" data-target="#addAccounts">Add Account/s</button>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Gino</td>
-                                <td>Busok</td>
-                                <td>5</td>
-                                <td class="dbloc-controls">
-                                    <i class="fa fa-pencil edit-action" data-title="Edit"></i>
-                                    <i class="fa fa-trash-o remove-action" data-title="Delete"></i>
-                                </td>
-                                <td class="dbloc-controls">
-                                    <button type="button" class="btn btn-sm gold-button dbloc-add-account" data-toggle="modal" data-target="#addAccounts">Add Account/s</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Jona</td>
-                                <td>Pereira</td>
-                                <td>5</td>
-                                <td class="dbloc-controls">
-                                    <i class="fa fa-pencil edit-action" data-title="Edit"></i>
-                                    <i class="fa fa-trash-o remove-action" data-title="Delete"></i>
-                                </td>
-                                <td class="dbloc-controls">
-                                    <button type="button" class="btn btn-sm gold-button dbloc-add-account" data-toggle="modal" data-target="#addAccounts">Add Account/s</button>
-                                </td>
-                            </tr>
+                                </tr>
+                        	</th:block>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- Footer Fragment -->
@@ -180,17 +157,11 @@
         </div>
     </div>
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-    <script src="js/select2.min.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-
     <script type="text/javascript">
 	    $(document).ready(function() {
 	    	$('body').tooltip({selector: '.edit-action, .remove-action'});
-	    	$('#referrerName').select2();
+	    	/* $('#referrerName').select2(); */
+	    	
 		});
     </script>
 
