@@ -18,17 +18,35 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
+                	<li>
+                        <a href="my-earnings" class="home-link about-link" th:classappend="${#httpServletRequest.getRequestURI() == '/my-earnings' ? 'active':''}">My Earnings</a>
+                    </li>
                     <li>
                         <a href="members" class="home-link about-link" th:classappend="${#httpServletRequest.getRequestURI() == '/members' ? 'active':''}">Members</a>
                     </li>
-                    <li>
+                    <li sec:authorize="hasRole('ADMIN')">
                         <a href="admin-products" class="home-link about-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin-products' ? 'active':''}">Products</a>
                     </li>
-                    <li>
+                    <li sec:authorize="hasRole('ADMIN')">
                         <a href="order" class="home-link about-link" th:classappend="${#httpServletRequest.getRequestURI() == '/order' ? 'active':''}">Order</a>
                     </li>
-                    <li>
+                    <li sec:authorize="hasRole('ADMIN')">
                         <a href="#" class="home-link about-link">Members Earnings</a>
+                    </li>
+                    <li class="dropdown">
+                    	<a href="#" class="home-link about-link dropdown-toggle" data-toggle="dropdown" 
+                    		th:classappend="${#httpServletRequest.getRequestURI() == '/account-settings' ? 'active':''}">
+                    		<i class="fa fa-gear"></i> <b class="caret"></b>
+                    	</a>
+                    	<ul class="dropdown-menu" style="margin-top: 5px">
+							<li class="home-link about-link">
+								<a href="account-settings">Account Settings</a>
+							</li>
+							<li class="divider"></li>
+							<li class="home-link about-link">
+								<a href="logout">Logout</a>
+							</li>
+						</ul>
                     </li>
                 </ul>
             </div>

@@ -1,5 +1,8 @@
 package org.networking.web.controller;
 
+import java.security.Principal;
+
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -10,7 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 
     @RequestMapping("/")
-    String index() {
+    String index(Principal principal) {
+    	if(principal != null) {
+    		return "redirect:members";
+    	}
+        return "index";
+    }
+    
+    @RequestMapping("/homepage")
+    String homepage() {
         return "index";
     }
     

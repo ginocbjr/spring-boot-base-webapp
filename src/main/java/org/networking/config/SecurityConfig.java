@@ -1,13 +1,16 @@
 package org.networking.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
-import javax.sql.DataSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Created by Gino on 8/28/2015.
@@ -27,9 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery(USERS_BY_USERNAME_QUERY)
+                .usersByUsernameQuery(USERS_BY_USERNAME_QUERY).passwordEncoder(encoder)
                 .authoritiesByUsernameQuery(AUTHS_BY_USERNAME_QUERY);
     }
 
@@ -50,6 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .formLogin()
                 .loginPage("/login")
-                .permitAll();
+                .permitAll()
+                .and()
+            .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
+            .permitAll()
+            .deleteCookies("remember-me")
+            	.and()
+            	.exceptionHandling().accessDeniedPage("/unauthorized");
     }
 }
