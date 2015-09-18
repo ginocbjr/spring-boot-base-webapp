@@ -99,9 +99,9 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 					Account next = accountList.get(currentAccount);
 					next.setIsNext(true);
 					accountRepository.save(next);
+				} else if (accounts != 1) {
+					account.setIsNext(false);
 				}
-				
-				account.setIsNext(false);
 				accountRepository.save(account);
 			}
 		}

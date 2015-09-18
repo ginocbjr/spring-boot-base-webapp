@@ -2,7 +2,6 @@ package org.networking.web.controller;
 
 import java.security.Principal;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -77,5 +76,10 @@ public class HomeController {
     @RequestMapping("/admin-products")
     String adminProducts() {
         return "admin-product-list";
+    }
+    
+    @RequestMapping("/order-products")
+    String orderProducts() {
+        return "order-products";
     }
 }

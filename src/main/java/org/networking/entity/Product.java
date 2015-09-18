@@ -19,6 +19,9 @@ public class Product extends BaseEntity{
 	
 	@Column(name="POINTS")
 	private Double points;
+	
+	@Column(name="DESCRIPTION", length=1000)
+	private String description;
 
 	public String getName() {
 		return name;
@@ -42,6 +45,14 @@ public class Product extends BaseEntity{
 
 	public void setPoints(Double points) {
 		this.points = points;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }
