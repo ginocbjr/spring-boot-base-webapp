@@ -6,13 +6,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 /**
  * Created by Jona on 9/05/2015.
@@ -21,7 +22,8 @@ import javax.persistence.Transient;
 @Table(name = "MEMBER")
 public class Member extends User{
 
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JsonView
+	@OneToMany(mappedBy = "member", cascade=CascadeType.ALL)
 	private List<Account> accounts;
 	
 	@Column(name="DATE_JOINED")

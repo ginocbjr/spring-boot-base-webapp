@@ -4,10 +4,11 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by Jona on 9/05/2015.
@@ -22,9 +23,13 @@ public class Account extends BaseEntity {
 	@Column(name = "TOTAL_POINTS")
 	private Double totalPoints;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@ManyToOne
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
+	
+	@Column(name = "IS_NEXT")
+	private Boolean isNext;
 
 	public Member getMember() {
 		return member;
@@ -48,6 +53,14 @@ public class Account extends BaseEntity {
 
 	public void setTotalPoints(Double totalPoints) {
 		this.totalPoints = totalPoints;
+	}
+
+	public Boolean getIsNext() {
+		return isNext;
+	}
+
+	public void setIsNext(Boolean isNext) {
+		this.isNext = isNext;
 	}
 
 }

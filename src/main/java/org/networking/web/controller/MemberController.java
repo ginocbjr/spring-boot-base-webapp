@@ -53,7 +53,6 @@ public class MemberController  {
         	return "member-add";
         } else {
         	memberService.create(member);
-        	//return "redirect:/members?create=true";
         	model.addAttribute("memberCreate", "success");
         	return "member-add";
         }

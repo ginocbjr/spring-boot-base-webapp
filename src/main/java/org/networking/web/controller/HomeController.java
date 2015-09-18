@@ -11,20 +11,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class HomeController {
-
+	
     @RequestMapping("/")
     String index(Principal principal) {
+    	/*
+    	 * Redirect to "My Earnings" page upon login
+    	 */
     	if(principal != null) {
-    		return "redirect:members";
+    		return "redirect:my-earnings";
     	}
         return "index";
     }
     
-    @RequestMapping("/homepage")
-    String homepage() {
-        return "index";
-    }
-    
+    /*
+	 * Public links
+	 */
     @RequestMapping(value = {"/login", "/logout"})
     String login() {
         return "login";
@@ -58,6 +59,14 @@ public class HomeController {
     @RequestMapping("/product-3")
     String product3() {
         return "product-3";
+    }
+    
+    /*
+     * Non-public links
+     */
+    @RequestMapping("/my-earnings")
+    String myEarnings() {
+        return "my-earnings";
     }
     
     @RequestMapping("/order")
