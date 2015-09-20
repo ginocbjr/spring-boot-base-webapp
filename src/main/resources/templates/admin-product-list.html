@@ -80,7 +80,7 @@
                                     <div class="col-xs-8">
                                         <div class="input-group">
                                             <span class="input-group-addon">Php</span>
-                                            <input type="text" class="form-control col-xs-6 money" id="price" name="price" ng-model="formData.price" ng-pattern="/^-?\d{1,3}(?:[\s,]\d{3})*(?:\.\d+)?$/" required="required" />
+                                            <input type="text" class="form-control col-xs-6 money" id="price" name="price" ng-model="formData.price" ng-pattern="/\d+/" required="required" />
                                             <span class="input-group-addon">.00</span>
                                         </div>
                                         <ng-messages class="help-block" for="form.price.$error" ng-if="form.price.$touched || submitted">
@@ -91,7 +91,7 @@
                                 <div class="form-group" ng-class="{ 'has-error' : form.points.$invalid &amp;&amp; (form.price.$touched || submitted) }">
                                     <label class="control-label col-xs-4">Points</label>
                                     <div class="col-xs-8">
-                                        <input type="text" class="form-control col-xs-6" id="points" name="points" ng-model="formData.points" required="required" />
+                                        <input type="text" class="form-control col-xs-6" id="points" name="points" ng-model="formData.points" ng-pattern="/\d+/" required="required" />
                                         <ng-messages class="help-block" for="form.points.$error" ng-if="form.points.$touched || submitted">
                                             <div ng-messages-include="/messages"></div>
                                         </ng-messages>
