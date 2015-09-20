@@ -70,6 +70,9 @@ public class Member extends User{
 	@Transient
 	private String tempRole;
 
+	@Transient
+	private String fullName;
+
 	public List<Account> getAccounts() {
 		return accounts;
 	}
@@ -200,6 +203,10 @@ public class Member extends User{
 
 	public void setDateJoinedString(String dateJoinedString) {
 		this.dateJoinedString = dateJoinedString;
+	}
+
+	public String getFullName() {
+		return this.getLastName() + " " + this.getFirstName() ;
 	}
 
 	/*public String toString() {

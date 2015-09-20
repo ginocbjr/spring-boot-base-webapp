@@ -77,6 +77,23 @@ app.
         };
     });
 
+app.controller("OrderController", function($scope, $http){
+
+    $scope.getMemberList = function(){
+        $scope.memberList = [];
+        var url = window.location.href + '/memberList';
+        $http({
+            method: 'GET',
+            url: url,
+            data: {'key' : $scope.memberName},
+            headers: {'Content-Type': 'application/json'}
+        }).success(function (data) {
+            $scope.memberList.push(data.object);
+
+        });
+    }
+});
+
 /**
  * Custom directives...
  */

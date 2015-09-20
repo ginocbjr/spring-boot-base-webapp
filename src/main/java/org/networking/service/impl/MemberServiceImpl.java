@@ -123,7 +123,12 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	public List<Member> findMemberByUsername(String username) {
 		return memberRepository.findMemberByUsername(username);
 	}
-	
+
+	@Override
+	public List<Member> findByLastnameOrFirstnameLike(String keyString){
+		return memberRepository.findByLastnameOrFirstnameLike("%" + keyString);
+	}
+
 	@Override
 	protected void setRepository(JpaRepository<Member, Long> repository) {
 		this.memberRepository = (MemberRepository) repository;
