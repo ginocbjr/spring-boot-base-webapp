@@ -73,9 +73,9 @@ public class HomeController {
         return "admin-order";
     }
     
-    @RequestMapping("/admin-products")
-    String adminProducts() {
-        return "admin-product-list";
+    @RequestMapping("/messages")
+    String messages() {
+        return "messages";
     }
     
     @RequestMapping("/order-products")

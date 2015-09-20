@@ -4,11 +4,11 @@
 <!-- Header Fragment -->
 <head th:replace="fragments/header :: header(pageTitle='DBLOC IBS - Products')"></head>
 
-<body>
+<body ng-app="dblocapp">
     <!-- Navigation Fragment -->
     <nav th:replace="fragments/navigation :: navigation"></nav>
     
-    <div class="container" style="margin-top: 70px;">
+    <div class="container main-body" style="margin-top: 70px;" ng-controller="FormController">
 
         <div class="row">
             <div class="content-box">
@@ -20,7 +20,7 @@
 
                 <div class="dbloc-table">
                     <div>
-                        <button type="button" class="btn gold-button dbloc-add" onClick="window.location.href='add-product'">
+                        <button type="button" class="btn gold-button dbloc-add" data-toggle="modal" data-target="#form-body">
                             <i class="fa fa-plus"></i> Add a Product
                         </button>
                     </div>
@@ -34,30 +34,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Light N' Lite</td>
-                                <td>Blabla</td>
-                                <td>5000</td>
+                            <tr th:each="record : ${records}">
+                                <td th:text="${record.name}"></td>
+                                <td th:text="${record.description}"></td>
+                                <td th:text="${record.price}"></td>
                                 <td class="dbloc-controls">
-                                    <i class="fa fa-pencil edit-action" data-title="Edit"></i>
-                                    <i class="fa fa-trash-o remove-action" data-title="Delete"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Luminous</td>
-                                <td>Blabla</td>
-                                <td>5000</td>
-                                <td class="dbloc-controls">
-                                    <i class="fa fa-pencil edit-action" data-title="Edit"></i>
-                                    <i class="fa fa-trash-o remove-action" data-title="Delete"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Invigorating Blend</td>
-                                <td>Blabla</td>
-                                <td>5000</td>
-                                <td class="dbloc-controls">
-                                    <i class="fa fa-pencil edit-action" data-title="Edit"></i>
+                                    <i class="fa fa-pencil edit-action" data-toggle="modal" data-target="#form-body" data-title="Edit" th:attr="ng-click='get(\'' + ${record.id} + '\');'"></i>
                                     <i class="fa fa-trash-o remove-action" data-title="Delete"></i>
                                 </td>
                             </tr>
@@ -66,11 +48,72 @@
                 </div>
             </div>
         </div>
+        <div class="content-box modal fade" aria-labelledby="Add Product" id="form-body">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title text-center">Add Product</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" name="form" novalidate="novalidate" ng-submit="submit(form)">
+                                <div class="form-group" ng-class="{ 'has-error' : form.name.$invalid &amp;&amp; (form.name.$touched || submitted)}">
+                                    <label class="control-label col-xs-4">Name</label>
+                                    <div class="col-xs-8">
+                                        <input type="text" class="form-control col-xs-6" id="name" name="name"
+                                               ng-model="formData.name"
+                                               ng-required="true" />
+                                        <ng-messages class="help-block" for="form.name.$error" ng-if="form.name.$touched || submitted">
+                                            <div ng-messages-include="/messages"></div>
+                                        </ng-messages>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-xs-4">Description</label>
+                                    <div class="col-xs-8">
+                                        <textarea rows="3" class="form-control col-xs-6" id="description" name="description" ng-model="formData.description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-error' : form.price.$invalid &amp;&amp; (form.price.$touched || submitted)}">
+                                    <label class="control-label col-xs-4">Price</label>
+                                    <div class="col-xs-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Php</span>
+                                            <input type="text" class="form-control col-xs-6 money" id="price" name="price" ng-model="formData.price" ng-pattern="/^-?\d{1,3}(?:[\s,]\d{3})*(?:\.\d+)?$/" required="required" />
+                                            <span class="input-group-addon">.00</span>
+                                        </div>
+                                        <ng-messages class="help-block" for="form.price.$error" ng-if="form.price.$touched || submitted">
+                                            <div ng-messages-include="/messages"></div>
+                                        </ng-messages>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-error' : form.points.$invalid &amp;&amp; (form.price.$touched || submitted) }">
+                                    <label class="control-label col-xs-4">Points</label>
+                                    <div class="col-xs-8">
+                                        <input type="text" class="form-control col-xs-6" id="points" name="points" ng-model="formData.points" required="required" />
+                                        <ng-messages class="help-block" for="form.points.$error" ng-if="form.points.$touched || submitted">
+                                            <div ng-messages-include="/messages"></div>
+                                        </ng-messages>
+                                    </div>
+                                </div>
 
+                                <button class="btn gold-button col-xs-4 save-form" type="submit" >Save</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Footer Fragment -->
     <footer th:replace="fragments/footer :: footer"></footer>
+
+
 
     <script type="text/javascript">
 	    $(document).ready(function() {
