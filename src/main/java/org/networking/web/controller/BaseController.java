@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +23,11 @@ public abstract class BaseController<T extends BaseEntity> {
     @RequestMapping(value = "/{id}", produces = {"application/json"})
     public @ResponseBody T get(@PathVariable Long id) {
         return baseService.load(id);
+    }
+
+    @RequestMapping(value = "/list", produces = {"application/json"})
+    public @ResponseBody List<T> list() {
+        return baseService.list();
     }
 
     @RequestMapping(value = "/create", method = {RequestMethod.POST}, produces = {"application/json"}, consumes = {"application/json"})
@@ -39,6 +45,13 @@ public abstract class BaseController<T extends BaseEntity> {
         BeanUtils.copyProperties(t, inDb);
         baseService.save(inDb);
         map.put("object", inDb);
+        return map;
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = {"application/json"})
+    public @ResponseBody Map<String, Object> delete(@PathVariable Long id) {
+        Map<String, Object> map = new HashMap<>();
+        baseService.delete(id);
         return map;
     }
 

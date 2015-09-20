@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ProductController  extends BaseController<Product> {
 	
 	@RequestMapping(method = {RequestMethod.GET})
-	public String view(ModelMap modelMap) {
-        modelMap.put("records", baseService.list());
+	public String view() {
         return "admin-product-list";
 	}
 

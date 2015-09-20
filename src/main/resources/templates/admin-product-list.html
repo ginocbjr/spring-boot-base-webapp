@@ -8,7 +8,7 @@
     <!-- Navigation Fragment -->
     <nav th:replace="fragments/navigation :: navigation"></nav>
     
-    <div class="container main-body" style="margin-top: 70px;" ng-controller="FormController">
+    <div class="container main-body" style="margin-top: 70px;" ng-controller="FormController" ng-init="init()">
 
         <div class="row">
             <div class="content-box">
@@ -34,13 +34,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="record : ${records}">
-                                <td th:text="${record.name}"></td>
-                                <td th:text="${record.description}"></td>
-                                <td th:text="${record.price}"></td>
+                            <tr ng-repeat="record in records">
+                                <td>{{record.name}}</td>
+                                <td>{{record.description}}</td>
+                                <td>{{record.price}}</td>
                                 <td class="dbloc-controls">
-                                    <i class="fa fa-pencil edit-action" data-toggle="modal" data-target="#form-body" data-title="Edit" th:attr="ng-click='get(\'' + ${record.id} + '\');'"></i>
-                                    <i class="fa fa-trash-o remove-action" data-title="Delete"></i>
+                                    <i class="fa fa-pencil edit-action" data-toggle="modal" data-target="#form-body" data-title="Edit" ng-click="get(record.id)"></i>
+                                    <i class="fa fa-trash-o remove-action" data-title="Delete" ng-click="delete(record.id, $index)"></i>
                                 </td>
                             </tr>
                         </tbody>

@@ -11,8 +11,20 @@ var app = angular.module("dblocapp", ['ngMessages']);
 app.
     controller("FormController", function($scope,$http) {
         $scope.formData = {};
+        $scope.records = [];
+
+        $scope.init = function() {
+            var url = window.location.href + '/list';
+            $http({
+                method: 'GET',
+                url : url
+            }).success(function(data) {
+                $scope.records = data;
+            });
+        };
 
         $scope.get = function(id) {
+            console.log(id);
             var url = window.location.href + '/' + id;
             $http({
                 method: 'GET',
@@ -22,13 +34,23 @@ app.
             });
         };
 
-        $scope.submit = function(form) {
-            console.log('submitted');
+        $scope.delete = function(id, index) {
+            console.log(id);
+            var url = window.location.href + '/' + id;
+            $http({
+                method: 'DELETE',
+                url : url
+            }).success(function(data) {
+                console.log(data);
+                $scope.records.splice(index, 1);
+            });
+        };
+
+        $scope.submit = function(form, modal) {
             $scope.submitted = true;
             if(!form.$valid) {
 
             } else {
-                console.log('here');
                 if($scope.formData.id) {
                     var url = window.location.href + '/' + $scope.formData.id;
                     $http({
@@ -37,7 +59,7 @@ app.
                         data: $scope.formData,
                         headers: {'Content-Type': 'application/json'}
                     }).success(function (data) {
-                        console.log(data);
+                        $('#form-body').modal('hide');
                     });
                 } else {
                     var url = window.location.href + '/create';
@@ -47,7 +69,8 @@ app.
                         data: $scope.formData,
                         headers: {'Content-Type': 'application/json'}
                     }).success(function (data) {
-                        console.log(data);
+                        $scope.records.push(data.object);
+                        $('#form-body').modal('hide');
                     });
                 }
             }
