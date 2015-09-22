@@ -10,12 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
+@RequestMapping("/admin/member")
 public class MemberController  {
 	
 	@Autowired
@@ -57,4 +59,13 @@ public class MemberController  {
         	return "member-add";
         }
     }
+
+	@RequestMapping(value="/search", method =RequestMethod.GET)
+	public @ResponseBody Map<String, Object> memberList(@RequestParam(value="key") String key){
+		Map<String, Object> result = new HashMap<>();
+		List<Member> members = memberService.findByLastnameOrFirstnameLike(key);
+		result.put("results", members);
+		result.put("length", members.size());
+		return result;
+	}
 }

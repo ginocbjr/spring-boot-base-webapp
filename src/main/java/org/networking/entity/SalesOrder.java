@@ -18,14 +18,17 @@ import javax.persistence.Table;
 @Table(name = "SALES_ORDER")
 public class SalesOrder extends BaseEntity{
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "SELLER_ID")
 	private Member seller;
+
+	@Column(name = "SELLER_ID", insertable = false, updatable = false)
+	private Long sellerId;
 	
 	@Column(name="TOTAL_PRICE")
 	private Double totalPrice;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<SalesItem> items;
 
 	public Member getSeller() {
@@ -52,4 +55,11 @@ public class SalesOrder extends BaseEntity{
 		this.items = items;
 	}
 
+	public Long getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(Long sellerId) {
+		this.sellerId = sellerId;
+	}
 }

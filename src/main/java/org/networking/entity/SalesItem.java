@@ -15,6 +15,9 @@ public class SalesItem extends BaseEntity{
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Product product;
+
+	@Column(name="product_id", insertable = false, updatable = false)
+	private Long productId;
 	
 	@Column(name="QTY")
 	private Long quantity;
@@ -44,5 +47,17 @@ public class SalesItem extends BaseEntity{
 
 	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	public String getSalesItemDisplay() {
+		return quantity + " " + product.getName();
 	}
 }

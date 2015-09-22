@@ -4,7 +4,7 @@ $.fn.dblocPage = function(options) {
     });
 };
 
-var app = angular.module("dblocapp", ['ngMessages']);
+var app = angular.module("dblocapp", ['ngMessages', 'angucomplete-alt']);
 /*
 * Controllers go here...
 * */
@@ -24,7 +24,6 @@ app.
         };
 
         $scope.get = function(id) {
-            console.log(id);
             var url = window.location.href + '/' + id;
             $http({
                 method: 'GET',
@@ -35,7 +34,6 @@ app.
         };
 
         $scope.delete = function(id, index) {
-            console.log(id);
             var url = window.location.href + '/' + id;
             $http({
                 method: 'DELETE',
@@ -47,6 +45,7 @@ app.
         };
 
         $scope.submit = function(form, modal) {
+            console.log($scope.formData);
             $scope.submitted = true;
             if(!form.$valid) {
 
@@ -77,7 +76,12 @@ app.
         };
     });
 
-app.controller("OrderController", function($scope, $http){
+/**
+ * Controller for Admin Order. Extends FormController
+ */
+app.controller("OrderController", function($scope, $http, $controller){
+    angular.extend(this, $controller('FormController', {$scope:$scope}));
+    $scope.formData.items = [];
 
     $scope.getMemberList = function(){
         $scope.memberList = [];
@@ -92,6 +96,37 @@ app.controller("OrderController", function($scope, $http){
 
         });
     }
+
+    $scope.memberSelected = function(selected) {
+        $scope.formData.sellerId = selected.originalObject.id;
+    };
+
+    $scope.productSelected = function(selected) {
+        console.log(selected.originalObject);
+        var items = $scope.formData.items;
+        items[this.$parent.$index].productId = selected.originalObject.id;
+        items[this.$parent.$index].productPrice = selected.originalObject.price;
+    };
+
+    $scope.quantityChanged = function(index) {
+        var items = $scope.formData.items;
+        var price = items[index].productPrice;
+        if(price != null) {
+            if(!$.isNumeric(items[index].quantity)) return;
+            items[index].totalPrice = price * items[index].quantity;
+            var sum = 0;
+            $.each(items, function (i, val) {
+                sum += val.totalPrice
+            });
+            $scope.formData.totalPrice = sum;
+        }
+    }
+
+    $scope.addItem = function() {
+        $scope.formData.items.push({
+
+        });
+    };
 });
 
 /**

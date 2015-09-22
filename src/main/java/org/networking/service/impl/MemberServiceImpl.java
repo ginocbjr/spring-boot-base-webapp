@@ -27,7 +27,6 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	private static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
-	@Autowired
 	private MemberRepository memberRepository;
 	
 	@Autowired
@@ -126,11 +125,13 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 
 	@Override
 	public List<Member> findByLastnameOrFirstnameLike(String keyString){
-		return memberRepository.findByLastnameOrFirstnameLike("%" + keyString);
+		return memberRepository.findByLastnameOrFirstnameLike("%" + keyString + "%");
 	}
 
+	@Autowired
 	@Override
 	protected void setRepository(JpaRepository<Member, Long> repository) {
-		this.memberRepository = (MemberRepository) repository;
+		this.repository = repository;
+		memberRepository = (MemberRepository) repository;
 	}
 }

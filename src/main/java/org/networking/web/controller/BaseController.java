@@ -5,6 +5,10 @@ import org.networking.service.BaseService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,6 +24,8 @@ public abstract class BaseController<T extends BaseEntity> {
     @Autowired
     protected BaseService<T> baseService;
 
+    private TransactionTemplate transactionTemplate;
+
     @RequestMapping(value = "/{id}", produces = {"application/json"})
     public @ResponseBody T get(@PathVariable Long id) {
         return baseService.load(id);
@@ -31,11 +37,26 @@ public abstract class BaseController<T extends BaseEntity> {
     }
 
     @RequestMapping(value = "/create", method = {RequestMethod.POST}, produces = {"application/json"}, consumes = {"application/json"})
-    public @ResponseBody Map<String, Object> create(@RequestBody T t) {
+    public @ResponseBody Map<String, Object> create(@RequestBody final T t) {
         Map<String, Object> map = new HashMap<>();
-        baseService.save(t);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+                preCreate(t);
+                baseService.save(t);
+                postCreate(t);
+            }
+        });
         map.put("object", t);
         return map;
+    }
+
+    protected void preCreate(T t) {
+
+    }
+
+    protected void postCreate(T t) {
+
     }
 
     @RequestMapping(value = "/{id}", method = {RequestMethod.PUT}, produces = {"application/json"}, consumes = {"application/json"})
@@ -53,6 +74,11 @@ public abstract class BaseController<T extends BaseEntity> {
         Map<String, Object> map = new HashMap<>();
         baseService.delete(id);
         return map;
+    }
+
+    @Autowired
+    public void setTransactionManager(PlatformTransactionManager platformTransactionManager) {
+        this.transactionTemplate = new TransactionTemplate(platformTransactionManager);
     }
 
 }

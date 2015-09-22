@@ -28,7 +28,7 @@
                         <a href="admin/product" class="home-link about-link" th:classappend="${(#httpServletRequest.getRequestURI() == '/admin/product' || #httpServletRequest.getRequestURI() == '/add-product') ? 'active':''}">Products</a>
                     </li>
                     <li sec:authorize="hasRole('ADMIN')">
-                        <a href="order" class="home-link about-link" th:classappend="${(#httpServletRequest.getRequestURI() == '/order' || #httpServletRequest.getRequestURI() == '/order-products') ? 'active':''}">Order</a>
+                        <a href="/admin/order" class="home-link about-link" th:classappend="${(#httpServletRequest.getRequestURI() == '/admin/order' || #httpServletRequest.getRequestURI() == '/order-products') ? 'active':''}">Order</a>
                     </li>
                     <li sec:authorize="hasRole('ADMIN')">
                         <a href="#" class="home-link about-link">Members Earnings</a>

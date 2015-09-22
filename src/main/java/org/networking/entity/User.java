@@ -1,5 +1,7 @@
 package org.networking.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -54,7 +56,8 @@ public class User extends BaseEntity {
     
     @Transient
     private String confirmPassword;
-    
+
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Authority> authorities;
 
@@ -144,4 +147,8 @@ public class User extends BaseEntity {
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
+
+    public String getCompleteName() {
+        return firstName + " " + lastName;
+    }
 }
