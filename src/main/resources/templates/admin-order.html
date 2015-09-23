@@ -66,18 +66,18 @@
                         <form class="form-horizontal" name="form" role="form" novalidate="novalidate" ng-submit="submit(form)">
                             <div class="form-group">
                                 <label class="control-label col-xs-4">Member Name</label>
-                                <div class="col-xs-8">
+                                <div class="col-xs-8" ng-class="{ 'has-error' : form.sellerId.$invalid &amp;&amp; (form.sellerId.$touched || submitted)}">
                                     <angucomplete-alt id="members"
                                                       placeholder="Search members"
                                                       pause="400"
                                                       selected-object="memberSelected"
                                                       remote-url="/admin/member/search?key="
                                                       remote-url-data-field="results"
-                                                      title-field="fullName"
+                                                      title-field="completeName"
                                                       input-class="form-control"
                                                       field-required="true"
                                             />
-                                    <input type="hidden" name="sellerId" id="sellerId" ng-model="formData.sellerId"/>
+                                    <input type="hidden" name="sellerId" id="sellerId" ng-model="formData.sellerId" required="required"/>
                                 </div>
                             </div>
                             <div class="form-group">  
@@ -102,22 +102,27 @@
                                             />
                                     <input type="hidden" name="productId" ng-model="item.productId" value="{{item.productId}}" />
                                 </div>
-                                <div class="col-xs-4">
-                                    <input class="form-control" ng-model="item.quantity" value="{{item.quantity}}" name="quantity" placeholder="Quantity" ng-change="quantityChanged($index)"/>
+                                <div class="col-xs-4" ng-class="{ 'has-error' : form.quantity.$invalid &amp;&amp; (form.quantity.$touched || submitted)}">
+                                    <input class="form-control" ng-model="item.quantity" value="{{item.quantity}}"
+                                           name="quantity" placeholder="Quantity" ng-change="quantityChanged($index)"
+                                           ng-required="true" ng-pattern="/\d+/"
+                                           />
                                 </div>
                                 <div class="col-xs-3">
                                     <input class="form-control" ng-model="item.totalPrice" value="{{item.totalPrice}}" name="totalPrice" placeholder="Total Price" readonly="readonly"/>
                                 </div>
                                 <div class="col-xs-1">
-                                    <i class="fa fa-trash-o remove-action" data-title="Delete" ></i>
+                                    <i class="fa fa-trash-o remove-action" data-title="Delete" ng-click="deleteItem($index)"></i>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-xs-4">Price</label>
-                                <div class="col-xs-8">
+                                <div class="col-xs-8" ng-class="{ 'has-error' : form.totalPrice.$invalid &amp;&amp; (form.totalPrice.$touched || submitted)}">
                                     <div class="input-group">
                                         <span class="input-group-addon">Php</span>
-                                        <input type="text" class="form-control col-xs-6 money" name="totalPrice" ng-model="formData.totalPrice"/>
+                                        <input type="text" class="form-control col-xs-6 money" name="totalPrice"
+                                               ng-model="formData.totalPrice" readonly="readonly"
+                                                ng-required="true" />
                                         <span class="input-group-addon">.00</span>
                                     </div>
                                 </div>

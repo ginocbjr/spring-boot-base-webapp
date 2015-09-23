@@ -45,7 +45,7 @@ app.
         };
 
         $scope.submit = function(form, modal) {
-            console.log($scope.formData);
+            console.log(form);
             $scope.submitted = true;
             if(!form.$valid) {
 
@@ -102,23 +102,27 @@ app.controller("OrderController", function($scope, $http, $controller){
     };
 
     $scope.productSelected = function(selected) {
-        console.log(selected.originalObject);
         var items = $scope.formData.items;
         items[this.$parent.$index].productId = selected.originalObject.id;
         items[this.$parent.$index].productPrice = selected.originalObject.price;
+        $scope.quantityChanged(this.$parent.$index);
     };
 
     $scope.quantityChanged = function(index) {
         var items = $scope.formData.items;
-        var price = items[index].productPrice;
-        if(price != null) {
-            if(!$.isNumeric(items[index].quantity)) return;
-            items[index].totalPrice = price * items[index].quantity;
-            var sum = 0;
-            $.each(items, function (i, val) {
-                sum += val.totalPrice
-            });
-            $scope.formData.totalPrice = sum;
+        if(items.length > 0) {
+            var price = items[index].productPrice;
+            if (price != null) {
+                if (!$.isNumeric(items[index].quantity)) return;
+                items[index].totalPrice = price * items[index].quantity;
+                var sum = 0;
+                $.each(items, function (i, val) {
+                    sum += val.totalPrice
+                });
+                $scope.formData.totalPrice = sum;
+            }
+        } else {
+            $scope.formData.totalPrice = 0;
         }
     }
 
@@ -126,6 +130,11 @@ app.controller("OrderController", function($scope, $http, $controller){
         $scope.formData.items.push({
 
         });
+    };
+
+    $scope.deleteItem = function(index) {
+        $scope.formData.items.splice(index, 1);
+        $scope.quantityChanged(index);
     };
 });
 
