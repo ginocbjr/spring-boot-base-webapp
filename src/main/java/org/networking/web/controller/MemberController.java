@@ -3,7 +3,9 @@ package org.networking.web.controller;
 import javax.validation.Valid;
 
 import org.networking.entity.Member;
+import org.networking.entity.Product;
 import org.networking.service.MemberService;
+import org.networking.service.ProductService;
 import org.networking.web.validator.MemberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/admin/member")
-public class MemberController  {
+public class MemberController extends BaseController<Product> {
 	
 	@Autowired
 	private MemberService memberService;
@@ -26,11 +28,11 @@ public class MemberController  {
 	@Autowired
 	private MemberValidator memberValidator;
 	
-	@RequestMapping("/members")
-    public String membersPage(Model model) {
+	@RequestMapping(method = {RequestMethod.GET})
+	public String view(Model model) {
 		model.addAttribute("memberList", memberService.findAll());
         return "member-list";
-    }
+	}
 	
 	@RequestMapping("/member-create")
 	public String memberCreatePage(Member member, Model model) {

@@ -22,7 +22,7 @@
                         <a href="my-earnings" class="home-link about-link" th:classappend="${#httpServletRequest.getRequestURI() == '/my-earnings' ? 'active':''}">My Earnings</a>
                     </li>
                     <li sec:authorize="hasRole('ADMIN')">
-                        <a href="members" class="home-link about-link" th:classappend="${(#httpServletRequest.getRequestURI() == '/members' || #httpServletRequest.getRequestURI() == '/member-create') ? 'active':''}">Members</a>
+                        <a href="/admin/member" class="home-link about-link" th:classappend="${(#httpServletRequest.getRequestURI() == '/admin/member' || #httpServletRequest.getRequestURI() == '/member-create') ? 'active':''}">Members</a>
                     </li>
                     <li sec:authorize="hasRole('ADMIN')">
                         <a href="/admin/product" class="home-link about-link" th:classappend="${(#httpServletRequest.getRequestURI() == '/admin/product' || #httpServletRequest.getRequestURI() == '/add-product') ? 'active':''}">Products</a>
@@ -31,7 +31,7 @@
                         <a href="/admin/order" class="home-link about-link" th:classappend="${(#httpServletRequest.getRequestURI() == '/admin/order' || #httpServletRequest.getRequestURI() == '/order-products') ? 'active':''}">Order</a>
                     </li>
                     <li sec:authorize="hasRole('ADMIN')">
-                        <a href="#" class="home-link about-link">Members Earnings</a>
+                        <a href="/admin/members-earnings" class="home-link about-link" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/members-earnings' ? 'active':''}">Members Earnings</a>
                     </li>
                     <li class="dropdown">
                     	<a href="#" class="home-link about-link dropdown-toggle" data-toggle="dropdown" 
