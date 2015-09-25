@@ -32,6 +32,10 @@ app.
                 $scope.formData = data;
             });
         };
+        
+        $scope.deleteRecord = function(id, index) {
+        	$('#are-you-sure').modal('show');
+        };
 
         $scope.delete = function(id, index) {
             var url = window.location.href + '/' + id;

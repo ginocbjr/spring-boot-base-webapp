@@ -69,13 +69,14 @@
                                 <div class="col-xs-8" ng-class="{ 'has-error' : form.sellerId.$invalid &amp;&amp; (form.sellerId.$touched || submitted)}">
                                     <angucomplete-alt id="members"
                                                       placeholder="Search members"
-                                                      pause="400"
+                                                      pause="200"
                                                       selected-object="memberSelected"
                                                       remote-url="/admin/member/search?key="
                                                       remote-url-data-field="results"
                                                       title-field="completeName"
                                                       input-class="form-control"
                                                       field-required="true"
+                                                      minlength="1"
                                             />
                                     <input type="hidden" name="sellerId" id="sellerId" ng-model="formData.sellerId" required="required"/>
                                 </div>
@@ -92,13 +93,14 @@
                                 <div class="col-xs-4">
                                     <angucomplete-alt id="product-search"
                                                       placeholder="Search Products"
-                                                      pause="400"
+                                                      pause="200"
                                                       selected-object="productSelected"
                                                       remote-url="/admin/product/search?key="
                                                       remote-url-data-field="results"
                                                       title-field="name"
                                                       input-class="form-control"
                                                       initial-value="item.product"
+                                                      minlength="1"
                                             />
                                     <input type="hidden" name="productId" ng-model="item.productId" value="{{item.productId}}" />
                                 </div>
