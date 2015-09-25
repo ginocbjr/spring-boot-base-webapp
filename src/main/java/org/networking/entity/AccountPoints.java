@@ -1,5 +1,7 @@
 package org.networking.entity;
 
+import org.networking.enums.PointType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,9 +22,8 @@ public class AccountPoints extends BaseEntity{
 	
 	@Column(name="POINTS")
 	private Long points;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="POINT_TYPE")
+
+	@Column(name="POINT_TYPE")
 	private PointType pointType;
 
 	public Long getPoints() {
