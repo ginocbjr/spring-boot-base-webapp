@@ -10,7 +10,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PRODUCT")
 public class Product extends BaseEntity{
-	
+
+	private enum MemberPointsType { PERCENTAGE, POINTS }
+
 	@Column(name="NAME")
 	private String name;
 	
@@ -19,7 +21,13 @@ public class Product extends BaseEntity{
 	
 	@Column(name="POINTS")
 	private Double points;
-	
+
+	@Column(name="MEMBER_POINTS")
+	private Double memberPoints;
+
+	@Column(name="MEMBER_POINTS_TYPE")
+	private MemberPointsType memberPointsType;
+
 	@Column(name="DESCRIPTION", length=1000)
 	private String description;
 
@@ -53,6 +61,22 @@ public class Product extends BaseEntity{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Double getMemberPoints() {
+		return memberPoints;
+	}
+
+	public void setMemberPoints(Double memberPoints) {
+		this.memberPoints = memberPoints;
+	}
+
+	public MemberPointsType getMemberPointsType() {
+		return memberPointsType;
+	}
+
+	public void setMemberPointsType(MemberPointsType memberPointsType) {
+		this.memberPointsType = memberPointsType;
 	}
 
 }

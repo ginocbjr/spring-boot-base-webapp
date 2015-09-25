@@ -136,6 +136,23 @@ app.controller("OrderController", function($scope, $http, $controller){
         $scope.formData.items.splice(index, 1);
         $scope.quantityChanged(index);
     };
+
+});
+
+/**
+ * Controller for Product. Extends FormController
+ */
+app.controller("ProductController", function($scope, $http, $controller) {
+    angular.extend(this, $controller('FormController', {$scope: $scope}));
+
+    //Set default value to PERCENTAGE
+    $scope.formData.memberPointsType = 'PERCENTAGE';
+
+    $scope.setMemberPointsType = function (value) {
+        $scope.formData.memberPointsType = value;
+
+        $('button .active').removeClass('active');
+    };
 });
 
 /**

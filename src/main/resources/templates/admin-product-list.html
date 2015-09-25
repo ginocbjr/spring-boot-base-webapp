@@ -8,7 +8,7 @@
     <!-- Navigation Fragment -->
     <nav th:replace="fragments/navigation :: navigation"></nav>
     
-    <div class="container main-body" style="margin-top: 70px;" ng-controller="FormController" ng-init="init()">
+    <div class="container main-body" style="margin-top: 70px;" ng-controller="ProductController" ng-init="init()">
 
         <div class="row">
             <div class="content-box">
@@ -97,8 +97,31 @@
                                         </ng-messages>
                                     </div>
                                 </div>
+                                <div class="form-group" ng-class="{ 'has-error' : form.points.$invalid &amp;&amp; (form.price.$touched || submitted) }">
+                                    <label class="control-label col-xs-4">Member Points</label>
+                                    <div class="col-xs-8">
+                                        <input type="text" class="form-control col-xs-6" id="memberPoints" name="points" ng-model="formData.memberPoints" ng-pattern="/\d+/" />
+                                        <ng-messages class="help-block" for="form.points.$error" ng-if="form.points.$touched || submitted">
+                                            <div ng-messages-include="/messages"></div>
+                                        </ng-messages>
 
-                                <button class="btn gold-button col-xs-4 save-form" type="submit" >Save</button>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-error' : form.points.$invalid &amp;&amp; (form.price.$touched || submitted) }">
+                                    <label class="control-label col-xs-4"></label>
+                                    <div class="col-xs-8">
+                                        <div class="btn-group" role="group" aria-label="...">
+                                            <button type="button" ng-click="setMemberPointsType('PERCENTAGE')" ng-class="['btn','btn-default', {'active': formData.memberPointsType == 'PERCENTAGE'}]">Percentage</button>
+                                            <button type="button" ng-click="setMemberPointsType('POINTS')" ng-class="['btn', 'btn-default', {'active': formData.memberPointsType == 'POINTS'}]">Points</button>
+                                        </div>
+
+                                        <ng-messages class="help-block" for="form.points.$error" ng-if="form.points.$touched || submitted">
+                                            <div ng-messages-include="/messages"></div>
+                                        </ng-messages>
+                                    </div>
+                                </div>
+
+                                <button class="btn gold-button col-xs-4  col-xs-offset-4 save-form" type="submit" >Save</button>
                             </form>
                         </div>
                         <div class="modal-footer">
