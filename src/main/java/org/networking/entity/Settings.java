@@ -25,6 +25,9 @@ public class Settings extends BaseEntity {
 	@Column(name = "NUMBER_VALUE")
 	private Long numberValue;
 
+	@Column(name = "VALUE_")
+	private String value;
+
 	public String getKey() {
 		return key;
 	}
@@ -47,5 +50,13 @@ public class Settings extends BaseEntity {
 
 	public void setNumberValue(Long numberValue) {
 		this.numberValue = numberValue;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

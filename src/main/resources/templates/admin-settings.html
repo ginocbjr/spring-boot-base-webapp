@@ -19,6 +19,11 @@
                 </div>
 
                 <div class="dbloc-table">
+                    <div>
+                        <button type="button" class="btn gold-button" ng-click="refresh()">
+                            <i class="fa fa-refresh"></i> Refresh
+                        </button>
+                    </div>
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
@@ -51,17 +56,26 @@
                         </div>
                         <div class="modal-body">
                             <form class="form-horizontal" name="form" novalidate="novalidate" ng-submit="submit(form)">
+                                <div class="form-group" ng-class="{ 'has-error' : form.key.$invalid &amp;&amp; (form.key.$touched || submitted)}">
+                                    <label class="control-label col-xs-4">Name</label>
+                                    <div class="col-xs-8">
+                                        <input type="text" class="form-control col-xs-6" id="key" name="key" ng-model="formData.key" ng-required="true"  />
+                                        <ng-messages class="help-block" for="form.key.$error" ng-if="form.key.$touched || submitted">
+                                            <div ng-messages-include="/messages"></div>
+                                        </ng-messages>
+                                    </div>
+                                </div>
                                 <div class="form-group" ng-class="{ 'has-error' : form.name.$invalid &amp;&amp; (form.name.$touched || submitted)}">
                                     <label class="control-label col-xs-4">Name</label>
                                     <div class="col-xs-8">
-                                        <input type="text" class="form-control col-xs-6" id="name" name="name" ng-model="formData.name" ng-required="true" readonly="true" />
+                                        <input type="text" class="form-control col-xs-6" id="name" name="name" ng-model="formData.name" ng-required="true"  />
                                         <ng-messages class="help-block" for="form.name.$error" ng-if="form.name.$touched || submitted">
                                             <div ng-messages-include="/messages"></div>
                                         </ng-messages>
                                     </div>
                                 </div>
                                 <div class="form-group" ng-class="{ 'has-error' : form.numberValue.$invalid &amp;&amp; (form.price.$touched || submitted) }">
-                                    <label class="control-label col-xs-4">Points</label>
+                                    <label class="control-label col-xs-4">Value</label>
                                     <div class="col-xs-8">
                                         <input type="text" class="form-control col-xs-6" id="numberValue" name="numberValue" ng-model="formData.numberValue" ng-pattern="/\d+/" ng-required="required" />
                                         <ng-messages class="help-block" for="form.numberValue.$error" ng-if="form.numberValue.$touched || submitted">
