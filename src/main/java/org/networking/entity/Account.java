@@ -2,6 +2,7 @@ package org.networking.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -24,7 +25,7 @@ public class Account extends BaseEntity {
 	private Double totalPoints;
 
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
 	

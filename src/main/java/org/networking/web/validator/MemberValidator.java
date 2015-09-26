@@ -27,12 +27,6 @@ public class MemberValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", 
 				"error.required", new Object[]{"Username"});
         
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "newPassword", 
-				"error.required", new Object[]{"Password"});
-        
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", 
-				"error.required", new Object[]{"Confirm Password"});
-        
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", 
 				"error.required", new Object[]{"First Name"});
         
@@ -42,13 +36,16 @@ public class MemberValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "numOfAccounts", 
 				"error.required", new Object[]{"No. of Accounts"});
         
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dateJoinedString", 
+				"error.required", new Object[]{"Date Joined"});
+        
         if(memberService.findAll() != null
         		&& memberService.findAll().size() > 0) {
         	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "referrer", 
     				"error.required", new Object[]{"Referrer"});
         }
         
-        if(member.getNewPassword() != null && member.getOldPassword() != null
+        if(member.getNewPassword() != null
         		&& !member.getNewPassword().equals(member.getConfirmPassword())) {
         	errors.rejectValue("confirmPassword","error.password-not-match");
         }
@@ -61,8 +58,21 @@ public class MemberValidator implements Validator {
         	errors.rejectValue("age", "error.should-be-positive", new Object[]{"Age"}, "Age should be greater than or equal to 1");
         }
         
-        if(idDuplicateUsername(member.getUsername())) {
-        	errors.rejectValue("username", "error.un-already-exists", new Object[]{member.getUsername()}, "Username already exists");
+        if(member.isNew()) {
+	        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "newPassword", 
+					"error.required", new Object[]{"Password"});
+	        	
+	        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", 
+					"error.required", new Object[]{"Confirm Password"});
+	        
+	        if(idDuplicateUsername(member.getUsername())) {
+	        	errors.rejectValue("username", "error.un-already-exists", new Object[]{member.getUsername()}, "Username already exists");
+	        }
+        } else {
+        	if(member.getNewPassword() != null && !member.getNewPassword().isEmpty()) {
+        		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", 
+        				"error.required", new Object[]{"Confirm Password"});
+        	}
         }
     }
     
