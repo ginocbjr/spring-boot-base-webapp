@@ -42,6 +42,10 @@
 							<li class="home-link about-link">
 								<a href="account-settings">Account Settings</a>
 							</li>
+							<li sec:authorize="hasRole('ADMIN')" class="divider"></li>
+							<li sec:authorize="hasRole('ADMIN')">
+								<a href="/admin/settings">Admin Settings</a>
+							</li>
 							<li class="divider"></li>
 							<li class="home-link about-link">
 								<a href="logout">Logout</a>
