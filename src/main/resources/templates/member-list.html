@@ -20,7 +20,7 @@
 
                 <div class="dbloc-table">
                     <div>
-                        <button type="button" class="btn gold-button dbloc-add" onClick="window.location.href='member-create'"> <!-- data-toggle="modal" data-target="#memberModal" -->
+                        <button type="button" class="btn gold-button dbloc-add" onClick="window.location.href='/admin/member/create'"> <!-- data-toggle="modal" data-target="#memberModal" -->
                            <i class="fa fa-plus"></i> Add a Member
                         </button>
                     </div>
@@ -41,8 +41,8 @@
                                 <td th:text="${member.lastName}"></td>
                                 <td th:text="${member.numOfAccounts}"></td>
                                 <td class="dbloc-controls">
-                                    <i class="fa fa-pencil edit-action" data-id="${member.id}" data-title="Edit" ng-click="get(record.id)"></i>
-                                    <i class="fa fa-trash-o remove-action" data-id="${member.id}" data-title="Delete" ng-click="delete(record.id, $index)"></i>
+                                    <i class="fa fa-pencil edit-action" data-title="Edit" onClick="editMember(this)"><span class="memberId hide" th:text="${member.id}"></span></i>
+                                    <!-- <i class="fa fa-trash-o remove-action" data-id="${member.id}" data-title="Delete" ng-click="delete(record.id, $index)"></i> -->
                                 </td>
                                 <td class="dbloc-controls">
                                     <button type="button" class="btn btn-sm gold-button dbloc-add-account" data-toggle="modal" data-target="#addAccounts">Add Account/s</button>
@@ -89,9 +89,11 @@
     <script type="text/javascript">
 	    $(document).ready(function() {
 	    	$('body').tooltip({selector: '.edit-action, .remove-action'});
-	    	/* $('#referrerName').select2(); */
-	    	
 		});
+	    
+	    function editMember(elem) {
+	    	window.location.href='/admin/member/edit/' + $(elem).find('.memberId').text();
+	    }
     </script>
 
 </body>
