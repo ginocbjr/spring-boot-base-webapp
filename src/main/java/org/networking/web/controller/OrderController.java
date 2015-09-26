@@ -4,6 +4,7 @@ import org.networking.entity.Member;
 import org.networking.entity.Product;
 import org.networking.entity.SalesItem;
 import org.networking.entity.SalesOrder;
+import org.networking.service.AccountPointsService;
 import org.networking.service.MemberService;
 import org.networking.service.ProductService;
 import org.networking.service.SalesOrderService;
@@ -31,7 +32,7 @@ public class OrderController extends BaseController<SalesOrder> {
     private ProductService productService;
 
     @Autowired
-    private SalesOrderService salesOrderService;
+    private AccountPointsService accountPointsService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String getView() {
@@ -51,6 +52,7 @@ public class OrderController extends BaseController<SalesOrder> {
 
     @Override
     protected void postCreate(SalesOrder salesOrder) {
-        //salesOrderService.createAccounts(salesOrder);
+        //Create account points for the sales order
+        accountPointsService.createForProduct(salesOrder);
     }
 }

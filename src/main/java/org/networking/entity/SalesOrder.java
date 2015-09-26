@@ -27,7 +27,7 @@ public class SalesOrder extends BaseEntity {
 	private List<SalesItem> items;
 
 	@Transient
-	private Double totalMemberPoints;
+	private Long totalMemberPoints;
 
 	@Transient
 	private Double totalGroupPoints;
@@ -64,12 +64,9 @@ public class SalesOrder extends BaseEntity {
 		this.sellerId = sellerId;
 	}
 
-	public Double getTotalMemberPoints() {
+	public Long getTotalMemberPoints() { return totalMemberPoints; }
 
-		return totalMemberPoints;
-	}
-
-	public void setTotalMemberPoints(Double totalMemberPoints) {
+	public void setTotalMemberPoints(Long totalMemberPoints) {
 		this.totalMemberPoints = totalMemberPoints;
 	}
 

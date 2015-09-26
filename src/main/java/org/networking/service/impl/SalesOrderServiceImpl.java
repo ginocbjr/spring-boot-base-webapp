@@ -29,10 +29,14 @@ public class SalesOrderServiceImpl extends BaseServiceImpl<SalesOrder> implement
             Double totalPoints = item.getProduct().getPoints();
             Double memberPoints = item.getProduct().getMemberPoints();
 
-            if(type.equals(Product.MemberPointsType.PERCENTAGE))
-                order.setTotalMemberPoints(totalPoints * (memberPoints / 100));
-            else
-                order.setTotalMemberPoints(totalPoints - memberPoints);
+            if(type.equals(Product.MemberPointsType.PERCENTAGE)){
+                Double points  = totalPoints * (memberPoints / 100);
+                order.setTotalMemberPoints(points.longValue());
+            }
+            else{
+                Double points  = totalPoints - memberPoints;
+                order.setTotalMemberPoints(points.longValue());
+            }
 
             order.setTotalGroupPoints(totalPoints - order.getTotalMemberPoints());
         }

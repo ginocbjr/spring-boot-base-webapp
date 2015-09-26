@@ -12,14 +12,6 @@ import java.util.Date;
 @Table(name = "ACCOUNT_POINTS")
 public class AccountPoints extends BaseEntity{
 
-	public AccountPoints(){}
-
-	public AccountPoints(Account account, PointType pointType, Long points){
-		this.account = account;
-		this.pointType = pointType;
-		this.points = points;
-	}
-
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ACCOUNT_ID")
 	private Account account;
@@ -28,7 +20,7 @@ public class AccountPoints extends BaseEntity{
 	private Long accountId;
 	
 	@Column(name="POINTS")
-	private Long points;
+	private Double points;
 
 	@Column(name="POINT_TYPE")
 	@Enumerated(EnumType.STRING)
@@ -41,7 +33,7 @@ public class AccountPoints extends BaseEntity{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateClaimed;
 
-	public Long getPoints() {
+	public Double getPoints() {
 		return points;
 	}
 
@@ -49,7 +41,7 @@ public class AccountPoints extends BaseEntity{
 		return pointType;
 	}
 
-	public void setPoints(Long points) {
+	public void setPoints(Double points) {
 		this.points = points;
 	}
 

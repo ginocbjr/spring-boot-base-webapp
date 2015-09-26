@@ -8,4 +8,5 @@ import org.networking.entity.SalesOrder;
 public interface SalesOrderService extends BaseService<SalesOrder> {
 
     void setPoints(SalesOrder order);
+
 }

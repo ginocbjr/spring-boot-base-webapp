@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.networking.entity.AccountPoints;
 import org.networking.entity.Member;
+import org.networking.entity.SalesOrder;
 import org.networking.enums.PointType;
 
 /**
@@ -17,6 +18,9 @@ public interface AccountPointsService extends BaseService<AccountPoints> {
 
 	List<AccountPoints> findAll();
 
-	void createByMemberAndType(Member member, PointType type);
+	void createForReferral(Member referrer, Integer newAcctCount);
+
+	void createForProduct(SalesOrder order);
 }
+
 
