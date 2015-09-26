@@ -42,4 +42,8 @@ public abstract class BaseEntity {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
+    
+    public final boolean isNew() {
+        return this.getId() == null || this.getId() <= 0;
+    }
 }
