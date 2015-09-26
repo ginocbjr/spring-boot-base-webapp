@@ -25,4 +25,6 @@ public interface MemberService extends BaseService<Member> {
 	List<Member> findWithUnclaimed(Date date);
 
 	List<MemberEarning> findMemberEarningsByDate(Date date);
+
+	void markEarningsAsClaimed(Long memberId, Long totalPoints, Double totalEarnings, Date date);
 }

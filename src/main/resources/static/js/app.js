@@ -159,6 +159,33 @@ app.controller("ProductController", function($scope, $http, $controller) {
     };
 });
 
+app.controller("MemberEarningsController", function($scope, $http) {
+   $scope.init = function() {
+       $scope.records = [];
+       var url = window.location.href + '/members';
+       $http({
+           method: 'GET',
+           url: url
+       }).success(function (data) {
+           $scope.records = data.members;
+       });
+   };
+    $scope.markClaimed = function(index) {
+      var record = $scope.records[index];
+        if(record != null) {
+            var url = window.location.href + '/markClaimed';
+            $http({
+                method: 'POST',
+                url: url,
+                data: {memberId : record.memberId, totalPoints : record.totalPoints, totalEarnings : 300 * record.totalPoints},
+                headers: {'Content-Type': 'application/json'}
+            }).success(function (data) {
+                record.isClaimed = true;
+            });
+        }
+    };
+});
+
 /**
  * Custom directives...
  */

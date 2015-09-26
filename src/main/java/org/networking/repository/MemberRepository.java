@@ -6,6 +6,7 @@ import java.util.List;
 import org.networking.entity.Member;
 import org.networking.entity.MemberEarning;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -41,4 +42,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 			"group by t3.member_id) t4 on u.id = t4.member_id\n" +
 			"left join earnings_history eh on eh.MEMBER_ID = u.id", nativeQuery = true)
 	List<Object[]> findMemberEarningsByDate(@Param(value = "date")Date date);
+
+	@Modifying
+	@Query(value = "update account_points ap \n" +
+			"set ap.IS_CLAIMED = true, ap.DATE_CLAIMED = now() \n" +
+			"where ap.account_id in (select id from account where MEMBER_ID = :memberId) \n" +
+			"and date(ap.CREATEDATE) = date(:date)", nativeQuery = true)
+	void updateAccountPointsAsClaimed(@Param(value = "memberId") Long memberId, @Param(value = "date") Date date);
 }

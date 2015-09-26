@@ -17,6 +17,7 @@ import org.networking.enums.PointType;
 import org.networking.repository.AccountRepository;
 import org.networking.repository.MemberRepository;
 import org.networking.service.AccountPointsService;
+import org.networking.service.EarningsHistoryService;
 import org.networking.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,6 +42,9 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	
 	@Autowired
 	private AccountPointsService accountPointsService;
+
+	@Autowired
+	private EarningsHistoryService earningsHistoryService;
 
 	@Override
 	public Member create(Member member) {
@@ -208,6 +212,13 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			earnings.add(me);
 		}
 		return earnings;
+	}
+
+	@Override
+	public void markEarningsAsClaimed(Long memberId, Long totalPoints, Double totalEarnings, Date date) {
+		memberRepository.updateAccountPointsAsClaimed(memberId, date);
+		Member member = memberRepository.findOne(memberId);
+		earningsHistoryService.createEarningsHistory(member, totalPoints, totalEarnings);
 	}
 
 	@Autowired
