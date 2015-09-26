@@ -1,5 +1,6 @@
 package org.networking.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -72,6 +73,12 @@ public class Member extends User{
 
 	@Transient
 	private String fullName;
+	
+	@Transient
+	private String dateJoinedValue;
+	
+	@Transient
+	private String birthdayValue;
 
 	public List<Account> getAccounts() {
 		return accounts;
@@ -208,9 +215,15 @@ public class Member extends User{
 	public String getFullName() {
 		return this.getLastName() + " " + this.getFirstName() ;
 	}
-
-	/*public String toString() {
-        return "Member(Username: " + this.getUsername() + ", FirstName: " + this.getFirstName() + ")";
-    }*/
+	
+	public String getDateJoinedValue() {
+		SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+		return this.getDateJoined()!=null?(dateTimeFormat.format(this.getDateJoined())):null;
+	}
+	
+	public String getBirthdayValue() {
+		SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy");
+		return this.getBirthday()!=null?(dateTimeFormat.format(this.getBirthday())):null;
+	}
 
 }

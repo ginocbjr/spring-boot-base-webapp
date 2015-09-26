@@ -8,7 +8,7 @@
     <!-- Navigation Fragment -->
     <nav th:replace="fragments/navigation :: navigation"></nav>
     
-    <div class="container main-body" style="margin-top: 70px;" ng-controller="FormController" ng-init="init()">
+    <div class="container main-body" style="margin-top: 70px;" ng-controller="MemberEarningsController" ng-init="init()">
         <div class="row">
             <div class="content-box">
                 <div>
@@ -28,28 +28,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Sonny Boy</td>
-                                <td>5</td>
-                                <td>Php 5,000.00</td>
+                            <tr ng-repeat="record in records">
+                                <td>{{record.firstName + ' ' + record.lastName}}</td>
+                                <td>{{record.totalPoints}}</td>
+                                <td>{{settings.SETTINGS_EARNINGS_PER_POINT.numberValue * record.totalPoints}}</td>
                                 <td class="dbloc-controls">
-                                	<span class="label label-success">CLAIMED</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Sonny Boy2</td>
-                                <td>5</td>
-                                <td>Php 5,000.00</td>
-                                <td class="dbloc-controls">
-                                	<span class="label label-success">CLAIMED</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Sonny Boy3</td>
-                                <td>5</td>
-                                <td>Php 5,000.00</td>
-                                <td class="dbloc-controls">
-                                	<button class="btn btn-danger">CLAIM</button>
+                                    <span class="label label-success" ng-show="record.isClaimed">CLAIMED</span>
+                                    <button class="btn btn-danger" ng-show="!record.isClaimed" ng-click="markClaimed($index)">CLAIM</button>
                                 </td>
                             </tr>
                         </tbody>

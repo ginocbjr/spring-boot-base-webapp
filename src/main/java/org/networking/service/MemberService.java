@@ -1,8 +1,10 @@
 package org.networking.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.networking.entity.Member;
+import org.networking.entity.MemberEarning;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,4 +21,10 @@ public interface MemberService extends BaseService<Member> {
 	List<Member> findMemberByUsername(String username);
 
 	List<Member> findByLastnameOrFirstnameLike(String keyString);
+
+	List<Member> findWithUnclaimed(Date date);
+
+	List<MemberEarning> findMemberEarningsByDate(Date date);
+
+	void markEarningsAsClaimed(Long memberId, Long totalPoints, Double totalEarnings, Date date);
 }

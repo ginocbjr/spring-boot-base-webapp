@@ -59,13 +59,28 @@ public abstract class BaseController<T extends BaseEntity> {
 
     }
 
+    protected void preUpdate(T t) {
+
+    }
+
+    protected void postUpdate(T t) {
+
+    }
+
     @RequestMapping(value = "/{id}", method = {RequestMethod.PUT}, produces = {"application/json"}, consumes = {"application/json"})
-    public @ResponseBody Map<String, Object> update(@PathVariable Long id, @RequestBody T t) {
-        Map<String, Object> map = new HashMap<>();
-        T inDb = baseService.load(id);
-        BeanUtils.copyProperties(t, inDb);
-        baseService.save(inDb);
-        map.put("object", inDb);
+    public @ResponseBody Map<String, Object> update(@PathVariable final Long id, @RequestBody final T t) {
+        final Map<String, Object> map = new HashMap<>();
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
+                preUpdate(t);
+                T inDb = baseService.load(id);
+                BeanUtils.copyProperties(t, inDb);
+                baseService.save(inDb);
+                postUpdate(t);
+                map.put("object", inDb);
+            }
+        });
         return map;
     }
 

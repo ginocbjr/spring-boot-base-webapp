@@ -159,6 +159,66 @@ app.controller("ProductController", function($scope, $http, $controller) {
     };
 });
 
+app.controller("MemberEarningsController", function($scope, $http, $controller) {
+    $controller('SettingsController', {$scope : $scope});
+    $scope.records = [];
+   $scope.init = function() {
+       $scope.findByKey('SETTINGS_EARNINGS_PER_POINT', function(){
+           var url = window.location.href + '/members';
+           $http({
+               method: 'GET',
+               url: url
+           }).success(function (data) {
+               $scope.records = data.members;
+               console.log($scope);
+           });
+       });
+   };
+    $scope.markClaimed = function(index) {
+      var record = $scope.records[index];
+        if(record != null) {
+            var url = window.location.href + '/markClaimed';
+            $http({
+                method: 'POST',
+                url: url,
+                data: {memberId : record.memberId, totalPoints : record.totalPoints, totalEarnings : 300 * record.totalPoints},
+                headers: {'Content-Type': 'application/json'}
+            }).success(function (data) {
+                record.isClaimed = true;
+            });
+        }
+    };
+});
+
+app.controller("SettingsController", function($scope, $http, $controller) {
+    angular.extend(this, $controller('FormController', {$scope: $scope}));
+    $scope.settings = {};
+    $scope.refresh = function() {
+        var url = window.location.href + '/refresh';
+        $http({
+            method: 'GET',
+            url: url,
+            headers: {'Content-Type': 'application/json'}
+        }).success(function (data) {
+            $scope.records = data.records;
+        });
+    };
+
+    $scope.findByKey = function(key, callback) {
+        var url = '/admin/settings/key/' + key;
+        $http({
+            method: 'GET',
+            url: url,
+            headers: {'Content-Type': 'application/json'}
+        }).success(function (data) {
+            $scope.settings[key] = data;
+            if(callback != null) {
+                callback();
+            }
+        });
+    };
+});
+
 /**
  * Custom directives...
  */

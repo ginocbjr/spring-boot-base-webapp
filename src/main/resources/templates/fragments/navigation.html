@@ -19,10 +19,10 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                 	<li>
-                        <a href="my-earnings" class="home-link about-link" th:classappend="${#httpServletRequest.getRequestURI() == '/my-earnings' ? 'active':''}">My Earnings</a>
+                        <a href="/my-earnings" class="home-link about-link" th:classappend="${#httpServletRequest.getRequestURI() == '/my-earnings' ? 'active':''}">My Earnings</a>
                     </li>
                     <li sec:authorize="hasRole('ADMIN')">
-                        <a href="/admin/member" class="home-link about-link" th:classappend="${(#httpServletRequest.getRequestURI() == '/admin/member' || #httpServletRequest.getRequestURI() == '/member-create') ? 'active':''}">Members</a>
+                        <a href="/admin/member" class="home-link about-link" th:classappend="${(#httpServletRequest.getRequestURI() == '/admin/member' || #httpServletRequest.getRequestURI() == '/admin/member/create') ? 'active':''}">Members</a>
                     </li>
                     <li sec:authorize="hasRole('ADMIN')">
                         <a href="/admin/product" class="home-link about-link" th:classappend="${(#httpServletRequest.getRequestURI() == '/admin/product' || #httpServletRequest.getRequestURI() == '/add-product') ? 'active':''}">Products</a>
@@ -41,6 +41,10 @@
                     	<ul class="dropdown-menu" style="margin-top: 5px">
 							<li class="home-link about-link">
 								<a href="account-settings">Account Settings</a>
+							</li>
+							<li sec:authorize="hasRole('ADMIN')" class="divider"></li>
+							<li sec:authorize="hasRole('ADMIN')">
+								<a href="/admin/settings">Admin Settings</a>
 							</li>
 							<li class="divider"></li>
 							<li class="home-link about-link">
