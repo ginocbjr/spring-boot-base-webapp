@@ -57,7 +57,7 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 		Long groupPoints = ((newAcctCount * referralPoints) -  totalPointsForDistribution);
 		Double totalGroupPoints = groupPoints.doubleValue();
 
-		this.distributePoints(referrer, totalPointsForDistribution, totalGroupPoints);
+		this.distributePoints(PointType.REFERRAL, referrer, totalPointsForDistribution, totalGroupPoints);
 
 	}
 
@@ -65,11 +65,11 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 	public void createForProduct(SalesOrder order){
 		salesOrderService.setPoints(order);
 
-		this.distributePoints(order.getSeller(),
+		this.distributePoints(PointType.PRODUCT, order.getSeller(),
 				order.getTotalMemberPoints(), order.getTotalGroupPoints());
 	}
 
-	public void distributePoints(Member member, Long totalPointsForDistribution, Double totalGroupPoints){
+	public void distributePoints(PointType type, Member member, Long totalPointsForDistribution, Double totalGroupPoints){
 		List<Account> accountList = member.getReferrer().getAccounts();
 
 		int accountSize = accountList.size();
@@ -107,7 +107,7 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 				accountService.save(account);
 
 				// Create/Update account points
-				List<AccountPoints> accountPointsList = this.findAccountPointsByAccountAndDateAndType(account.getId(), new Date(), PointType.REFERRAL);
+				List<AccountPoints> accountPointsList = this.findAccountPointsByAccountAndDateAndType(account.getId(), new Date(), type);
 				AccountPoints points = new AccountPoints();
 				points.setUpdateDate(new Date());
 				if(accountPointsList != null && accountPointsList.size() > 0) {
@@ -116,14 +116,14 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 				} else {
 					points.setCreateDate(new Date());
 					points.setPoints(1D);
-					points.setPointType(PointType.REFERRAL);
+					points.setPointType(type);
 					points.setAccount(account);
 				}
 				this.create(points);
 			}
 
 			// Create/Update group points
-			List<AccountPoints> groupPointsList = this.findAccountPointsByAccountAndDateAndType(1l, new Date(), PointType.GROUP);
+			List<AccountPoints> groupPointsList = this.findAccountPointsByAccountAndDateAndType(1l, new Date(), type);
 			AccountPoints group = new AccountPoints();
 			if(groupPointsList != null && groupPointsList.size() > 0) {
 				group = groupPointsList.get(0);
@@ -131,7 +131,7 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 			} else {
 				group.setCreateDate(new Date());
 				group.setPoints(totalGroupPoints);
-				group.setPointType(PointType.GROUP);
+				group.setPointType(type);
 				group.setAccount(accountService.load(1l));
 			}
 			this.create(group);
