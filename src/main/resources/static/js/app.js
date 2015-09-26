@@ -186,6 +186,10 @@ app.controller("MemberEarningsController", function($scope, $http) {
     };
 });
 
+app.controller("SettingsController", function($scope, $http, $controller) {
+    angular.extend(this, $controller('FormController', {$scope: $scope}));
+});
+
 /**
  * Custom directives...
  */
