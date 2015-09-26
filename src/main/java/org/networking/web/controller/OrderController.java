@@ -6,6 +6,7 @@ import org.networking.entity.SalesItem;
 import org.networking.entity.SalesOrder;
 import org.networking.service.MemberService;
 import org.networking.service.ProductService;
+import org.networking.service.SalesOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,9 @@ public class OrderController extends BaseController<SalesOrder> {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private SalesOrderService salesOrderService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String getView() {
         return "admin-order";
@@ -43,5 +47,10 @@ public class OrderController extends BaseController<SalesOrder> {
         for(SalesItem item : salesOrder.getItems()) {
             item.setProduct(productService.load(item.getProductId()));
         }
+    }
+
+    @Override
+    protected void postCreate(SalesOrder salesOrder) {
+        //salesOrderService.createAccounts(salesOrder);
     }
 }

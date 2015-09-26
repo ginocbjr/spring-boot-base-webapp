@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "PRODUCT")
 public class Product extends BaseEntity{
 
-	private enum MemberPointsType { PERCENTAGE, POINTS }
+	public enum MemberPointsType { PERCENTAGE, POINTS }
 
 	@Column(name="NAME")
 	private String name;

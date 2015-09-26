@@ -70,40 +70,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			}
 		}
 		
-		// Update referrers points
-		List<Account> accountList = member.getReferrer().getAccounts();
-		int listSize = accountList.size();
-		int currentAccount = 0;
-		for(Account acct : accountList) {
-			// get next account
-			if(acct.getIsNext()) {
-				break; 
-			}
-			currentAccount++;
-		}
-		if(accountList != null && listSize >= 1) {
-			for(int i = 1; i <= accounts; i++) {
-				Account account = accountList.get(currentAccount);
-				account.setTotalPoints(account.getTotalPoints() + 1);
-				double a = account.getTotalPoints() + 1;
-				// If currentAccount is already equal to the index of the last account in the list, go back to zero
-				// else continue iterating currentAccount
-				if(currentAccount == listSize-1) {
-					currentAccount = 0;
-				} else {
-					currentAccount++;
-				}
-				
-				if(i == accounts) {
-					Account next = accountList.get(currentAccount);
-					next.setIsNext(true);
-					accountRepository.save(next);
-				} else if (accounts != 1) {
-					account.setIsNext(false);
-				}
-				accountRepository.save(account);
-			}
-		}
+		//TODO Add points here
 		
         return memberRepository.save(member);
 	}

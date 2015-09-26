@@ -16,6 +16,12 @@ import javax.persistence.Table;
 @Table(name = "ACCOUNT_POINTS")
 public class AccountPoints extends BaseEntity{
 
+	public AccountPoints(Account account, PointType pointType, Long points){
+		this.account = account;
+		this.pointType = pointType;
+		this.points = points;
+	}
+
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ACCOUNT_ID")
 	private Account account;
