@@ -1,12 +1,16 @@
 package org.networking.service.impl;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.networking.entity.Account;
 import org.networking.entity.Member;
+import org.networking.entity.MemberEarning;
 import org.networking.entity.User;
 import org.networking.repository.AccountRepository;
 import org.networking.repository.MemberRepository;
@@ -126,6 +130,33 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	@Override
 	public List<Member> findByLastnameOrFirstnameLike(String keyString){
 		return memberRepository.findByLastnameOrFirstnameLike("%" + keyString + "%");
+	}
+
+	@Override
+	public List<Member> findWithUnclaimed(Date date) {
+		return memberRepository.findWithUnclaimed(date);
+	}
+
+	@Override
+	public List<MemberEarning> findMemberEarningsByDate(Date date) {
+		List<MemberEarning> earnings = new ArrayList<>();
+		List<Object[]> objs = memberRepository.findMemberEarningsByDate(date);
+		for(Object[] obj : objs) {
+			MemberEarning me = new MemberEarning();
+			me.setMemberId(((BigInteger)obj[0]).longValue());
+			me.setFirstName((String)obj[1]);
+			me.setLastName((String)obj[2]);
+			me.setMiddleName((String)obj[3]);
+			me.setTotalPoints(((BigDecimal)obj[4]).longValue());
+			BigInteger bg = (BigInteger)obj[5];
+			if(bg != null && bg.intValue() == 1) {
+				me.setIsClaimed(true);
+			} else {
+				me.setIsClaimed(false);
+			}
+			earnings.add(me);
+		}
+		return earnings;
 	}
 
 	@Autowired

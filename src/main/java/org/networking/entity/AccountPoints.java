@@ -2,12 +2,8 @@ package org.networking.entity;
 
 import org.networking.enums.PointType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by Jona on 9/05/2015.
@@ -19,12 +15,23 @@ public class AccountPoints extends BaseEntity{
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ACCOUNT_ID")
 	private Account account;
+
+	@Column(name="ACCOUNT_ID", insertable = false, updatable = false)
+	private Long accountId;
 	
 	@Column(name="POINTS")
 	private Long points;
 
 	@Column(name="POINT_TYPE")
+	@Enumerated(EnumType.STRING)
 	private PointType pointType;
+
+	@Column(name = "IS_CLAIMED")
+	private Boolean isClaimed;
+
+	@Column(name = "DATE_CLAIMED")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dateClaimed;
 
 	public Long getPoints() {
 		return points;
@@ -49,5 +56,28 @@ public class AccountPoints extends BaseEntity{
 	public void setAccount(Account account) {
 		this.account = account;
 	}
-	
+
+	public Boolean getIsClaimed() {
+		return isClaimed;
+	}
+
+	public void setIsClaimed(Boolean isClaimed) {
+		this.isClaimed = isClaimed;
+	}
+
+	public Date getDateClaimed() {
+		return dateClaimed;
+	}
+
+	public void setDateClaimed(Date dateClaimed) {
+		this.dateClaimed = dateClaimed;
+	}
+
+	public Long getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}
 }

@@ -27,6 +27,9 @@ public class Account extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
+
+	@Column(name = "MEMBER_ID", insertable = false, updatable = false)
+	private Long memberId;
 	
 	@Column(name = "IS_NEXT")
 	private Boolean isNext;
@@ -63,4 +66,11 @@ public class Account extends BaseEntity {
 		this.isNext = isNext;
 	}
 
+	public Long getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
 }
