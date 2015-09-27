@@ -48,10 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
-        	.antMatchers("/")//"/products","/infinite-business-solutions","/contact"
+        	.antMatchers("/","/products","/infinite-business-solutions","/contact")
         		.permitAll()
     		//.antMatchers("/admin/**").hasRole("ADMIN")
-                //.anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login")
