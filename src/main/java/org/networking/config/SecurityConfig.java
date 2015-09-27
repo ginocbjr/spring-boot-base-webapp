@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     private static final String USERS_BY_USERNAME_QUERY =
-            "select username as principal, password as credentials, true from user where username = ?";
+            "select username as principal, password as credentials, true from USER where username = ?";
 
     private static final String AUTHS_BY_USERNAME_QUERY =
             "select u.username as principal, a.role as role " +
