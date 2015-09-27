@@ -14,7 +14,7 @@
             <div class="content-box">
                 <div>
                     <div class="page-header">
-                        <h3>DBLOC-IBS Members</h3>
+                        <h3 class="text-center"><span>DBLOC-IBS Members</span></h3>
                     </div>
                 </div>
 
@@ -46,6 +46,7 @@
                                 </td>
                                 <td class="dbloc-controls">
                                     <button type="button" class="btn btn-sm gold-button dbloc-add-account" data-toggle="modal" data-target="#addAccounts">Add Account/s</button>
+                                	<div class="hidden-username hide" th:text="${member.username}"></div>
                                 </td>
                                 </tr>
                         	</th:block>
@@ -59,7 +60,7 @@
     <!-- Footer Fragment -->
     <footer th:replace="fragments/footer :: footer"></footer>
 
-    <div id="addAccounts" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Add Accounts" aria-hidden="true">
+    <div id="addAccounts" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Add Accounts" aria-hidden="true" data-username="0">
         <div class="vertical-alignment-helper">
             <div class="modal-dialog vertical-align-center">
                 <div class="modal-content">
@@ -72,14 +73,14 @@
                             <div class="form-group">  
                                 <label class="control-label col-xs-4">Number of Account/s</label>
                                 <div class="col-xs-2">
-                                    <input type="text" class="form-control"/>
+                                    <input type="text" class="form-control" id="num-of-accounts"/>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success" data-submit="save">Submit</button>
+                        <button type="submit" class="btn btn-success" data-submit="save" id="submit-add-accounts">Submit</button>
                     </div>
                 </div>
             </div>
@@ -89,6 +90,22 @@
     <script type="text/javascript">
 	    $(document).ready(function() {
 	    	$('body').tooltip({selector: '.edit-action, .remove-action'});
+		}).on('click','.dbloc-add-account',function() {
+			var elem = $(this).siblings('.hidden-username');
+			$('#addAccounts').data('username',$(elem).text());
+		}).on('click','#submit-add-accounts',function() {
+            var url = window.location.href + '/addAccounts';
+            $.ajax({url : url,
+				type : 'POST',
+				dataType : 'json',
+				data : {
+					username : $('#addAccounts').data('username'), numAccounts : $('#num-of-accounts').val()
+				},
+				success : function(data) {
+					/* console.log(data);
+	                console.log('aaaaaaaa'); */
+				}
+			});
 		});
 	    
 	    function editMember(elem) {

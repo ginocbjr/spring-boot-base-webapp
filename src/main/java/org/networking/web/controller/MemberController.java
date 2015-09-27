@@ -1,12 +1,16 @@
 package org.networking.web.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.networking.entity.Account;
 import org.networking.entity.Member;
+import org.networking.service.AccountPointsService;
+import org.networking.service.AccountService;
 import org.networking.service.MemberService;
 import org.networking.web.validator.MemberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,12 @@ public class MemberController extends BaseController<Member> {
 	
 	@Autowired
 	private MemberValidator memberValidator;
+	
+	@Autowired
+	private AccountService accountService;
+	
+	@Autowired
+	private AccountPointsService accountPointsService;
 	
 	@RequestMapping(method = {RequestMethod.GET})
 	public String view(Model model) {
@@ -69,6 +79,53 @@ public class MemberController extends BaseController<Member> {
     	} else {
     		return "redirect:/admin/member/edit/" + member.getId();
     	}*/
+    }
+    
+    // Add new accounts
+    @RequestMapping(value = "/addAccounts", produces = "application/json", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> addAccounts(@RequestParam String username, @RequestParam Integer numAccounts) {
+		Map<String, Object> model = new HashMap<>();
+		
+		if(username != null && numAccounts != null) {
+			Member member = memberService.findMemberByUsername(username).get(0);
+			member.setNumOfAccounts(member.getNumOfAccounts() + numAccounts);
+			if(numAccounts != null && numAccounts >= 1) {
+				for(int i = 1; i <= numAccounts; i++) {
+					Account account = new Account();
+					account.setCreateDate(new Date());
+					account.setUpdateDate(new Date());
+					account.setDateActivated(new Date());
+					account.setMember(member);
+					account.setTotalPoints(0d);
+					if(i == 1) {
+						Account firstAcct = member.getAccounts().get(0);
+						if(firstAcct.getIsNext()) {
+							firstAcct.setIsNext(false);
+							account.setIsNext(true);
+							accountService.save(firstAcct);
+						} else {
+							account.setIsNext(false);
+						}
+					} else {
+						account.setIsNext(false);
+					}
+					accountService.save(account);
+				}
+			}
+			
+			
+			if(member.getReferrer() != null && member.getReferrer().getId() != 1) {
+				//Add points to referrer
+				accountPointsService.createForReferral(member, numAccounts);
+			}
+			
+			memberService.save(member);
+			
+			model.put("success", true);
+		} else {
+			model.put("success", false);
+		}
+		return model;
     }
 
 	@RequestMapping(value="/search", method =RequestMethod.GET)
