@@ -12,6 +12,7 @@ import org.networking.entity.Account;
 import org.networking.entity.AccountPoints;
 import org.networking.entity.Member;
 import org.networking.entity.MemberEarning;
+import org.networking.entity.PointsSummaryHelper;
 import org.networking.entity.User;
 import org.networking.enums.PointType;
 import org.networking.repository.AccountRepository;
@@ -151,6 +152,21 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			earnings.add(me);
 		}
 		return earnings;
+	}
+	
+	@Override
+	public List<PointsSummaryHelper> findAccountPointsByMember(String username) {
+		List<PointsSummaryHelper> summary = new ArrayList<>();
+		List<Object[]> objs = memberRepository.findAccountPointsByMember(username);
+		for(Object[] obj : objs) {
+			PointsSummaryHelper p = new PointsSummaryHelper();
+			p.setAccountName((String)obj[0]);
+			p.setReferralPoints(((BigDecimal)obj[1]).longValue());
+			p.setProductPoints(((BigDecimal)obj[2]).longValue());
+			p.setGroupPoints(((BigDecimal)obj[3]).longValue());
+			summary.add(p);
+		}
+		return summary;
 	}
 
 	@Override

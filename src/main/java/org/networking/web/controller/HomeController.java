@@ -63,11 +63,6 @@ public class HomeController {
     /*
      * Non-public links
      */
-    @RequestMapping("/my-earnings")
-    String myEarnings() {
-        return "my-earnings";
-    }
-    
     @RequestMapping("/order")
     String order() {
         return "admin-order";
