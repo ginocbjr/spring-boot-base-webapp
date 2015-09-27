@@ -12,40 +12,58 @@
 
         <div class="row">
             <div class="content-box">
-                <div>
-                    <div class="page-header text-center">
-                        <h3>Points Summary</h3>
-                    </div>
-                </div>
-                <div class="dbloc-table">
-                    <table class="table table-striped table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th style="width: 40%">Account Name</th>
-                                <th style="width: 20%">Referral Points</th>
-                                <th style="width: 20%">Product Points</th>
-                                <th style="width: 20%">Group Points</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        	<th:block th:each="row : ${pointsSummary}">
-                        		<tr>
-                        		<td th:text="${row.accountName}"></td>
-                                <td th:text="${row.referralPoints}"></td>
-                                <td th:text="${row.productPoints}"></td>
-                                <td th:text="${row.groupPoints}"></td>
-                                </tr>
-                        	</th:block>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div>
-                    <div class="page-header text-center">
-                        <h3>Weekly Earnings</h3>
-                    </div>
-                </div>
-                
+            	<ul class="nav nav-tabs" role="tablist">
+				  <li class="active"><a href="#tab1" role="tab" data-toggle="tab">Points Summary</a></li>
+				  <li><a href="#tab2" role="tab" data-toggle="tab">Weekly Earnings</a></li>
+				</ul>
+				
+				<div class="tab-content">
+					<div class="tab-pane active fade in" id="tab1">
+		                <div>
+		                    <div class="page-header">
+		                        <h3 class="text-center"><span>Points Summary</span></h3>
+		                    </div>
+		                </div>
+		                <div class="dbloc-table">
+		                    <table id="point-summary-table" class="table table-striped table-bordered table-hover">
+		                        <thead>
+		                            <tr>
+		                                <th style="width: 40%">Account Name</th>
+		                                <th style="width: 40%">Personal Points</th>
+		                                <th style="width: 20%">Group Points</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+		                        	<th:block th:each="row : ${pointsSummary}">
+		                        		<tr>
+		                        		<td><div class="text-center">
+		                                	<span class="points" th:text="${row.accountName}"></span>
+		                                </div></td>
+		                                <td><div class="text-center">
+		                                	<span class="points" th:text="${row.personalPoints}"></span>
+		                                	<div class="point-breakdown">
+		                                		<div class="col-xs-6">REFERRAL: <span style="font-weight: bold" th:text="${row.referralPoints}"></span></div>
+		                                		<div style="border-left: none !important;" class="col-xs-6">PRODUCT: <span style="font-weight: bold" th:text="${row.productPoints}"></span></div>
+		                                	</div>
+		                                </div></td>
+		                                <td><div class="text-center">
+		                                	<span class="points" th:text="${row.groupPoints}"></span>
+		                                </div></td>
+		                                </tr>
+		                        	</th:block>
+		                        </tbody>
+		                    </table>
+		                </div>
+	                </div>
+	                
+	                <div class="tab-pane fade" id="tab2">
+		                <div>
+		                    <div class="page-header text-center">
+		                        <h3>Weekly Earnings</h3>
+		                    </div>
+		                </div>
+					</div>
+				</div>
                 
             </div>
         </div>
@@ -56,6 +74,18 @@
 
     <script type="text/javascript">
 	    $(document).ready(function() {
+	    	/* $('#dashboard-tab a').click(function (e) {
+	    		  e.preventDefault();
+	    		  $(this).tab('show');
+    		}); */
+	    	
+    		/* $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {    
+    		    var target = $(this).attr('href');
+
+    		    $(target).css('left','-'+$(window).width()+'px');   
+    		    var left = $(target).offset().left;
+    		    $(target).css({left:left}).animate({"left":"0px"}, "10");
+    		}); */
 		});
     </script>
 

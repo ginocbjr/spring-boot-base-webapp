@@ -49,15 +49,18 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 			"and date(ap.CREATEDATE) = date(:date)", nativeQuery = true)
 	void updateAccountPointsAsClaimed(@Param(value = "memberId") Long memberId, @Param(value = "date") Date date);
 	
-	@Query(value = "select concat(u.username,'-',@curRow \\:= @curRow + 1) as accountName, "
+	@Query(value = "select concat(t.username,'-',@curRow \\:= @curRow + 1) as accountName, "
+			+ " sum(t.referralPoints + t.productPoints) as personalPoints, "
+			+ " sum(t.referralPoints),sum(t.productPoints),sum(t.groupPoints) from ( "
+			+ " select ap.account_id as id, u.username as username, "
 			+ " if(ap.point_type = 'REFERRAL', sum(ap.points),0) as referralPoints, "
 			+ " if(ap.point_type = 'PRODUCT', sum(ap.points),0) as productPoints, "
 			+ " if(ap.point_type = 'GROUP', sum(ap.points),0) as groupPoints "
 			+ " from account_points ap "
 			+ " join account a on ap.account_id = a.id "
 			+ " join user u on a.member_id = u.id "
-			+ " join (select @curRow \\:= 0) r "
 			+ " where u.username = :username "
-			+ " group by ap.account_id;", nativeQuery = true)
+			+ " group by ap.account_id,ap.point_type "
+			+ " ) as t join (select @curRow \\:= 0) r group by id", nativeQuery = true)
 	List<Object[]> findAccountPointsByMember(@Param(value = "username") String username);
 }

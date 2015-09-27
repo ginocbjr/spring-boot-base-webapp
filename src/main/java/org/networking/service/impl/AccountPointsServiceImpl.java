@@ -1,9 +1,14 @@
 package org.networking.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.networking.entity.*;
+import org.networking.entity.Account;
+import org.networking.entity.AccountPoints;
+import org.networking.entity.Member;
+import org.networking.entity.SalesOrder;
+import org.networking.entity.Settings;
 import org.networking.enums.PointType;
 import org.networking.repository.AccountPointsRepository;
 import org.networking.service.AccountPointsService;
@@ -52,8 +57,7 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 		Long memberPercentage = settingsService.findByKey(Settings.SETTINGS_PERCENTAGE_PER_REFERRAL).getNumberValue();
 
 		//Points to be distributed depends on Settings
-		Long totalPointsForDistribution
-				= (newAcctCount * referralPoints) * (memberPercentage/100);
+		Long totalPointsForDistribution = ((newAcctCount * referralPoints * memberPercentage)/100);
 		Long groupPoints = ((newAcctCount * referralPoints) -  totalPointsForDistribution);
 		Double totalGroupPoints = groupPoints.doubleValue();
 
@@ -64,13 +68,18 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 	@Override
 	public void createForProduct(SalesOrder order){
 		salesOrderService.setPoints(order);
-
+		
 		this.distributePoints(PointType.PRODUCT, order.getSeller(),
 				order.getTotalMemberPoints(), order.getTotalGroupPoints());
 	}
 
 	public void distributePoints(PointType type, Member member, Long totalPointsForDistribution, Double totalGroupPoints){
-		List<Account> accountList = member.getReferrer().getAccounts();
+		List<Account> accountList = new ArrayList<Account>();
+		if(type.toString().equals(PointType.REFERRAL.toString())) {
+			accountList = member.getReferrer().getAccounts();
+		} else {
+			accountList = member.getAccounts();
+		}
 
 		int accountSize = accountList.size();
 		int currentAccount = 0;
@@ -109,12 +118,13 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 				// Create/Update account points
 				List<AccountPoints> accountPointsList = this.findAccountPointsByAccountAndDateAndType(account.getId(), new Date(), type);
 				AccountPoints points = new AccountPoints();
-				points.setUpdateDate(new Date());
 				if(accountPointsList != null && accountPointsList.size() > 0) {
 					points = accountPointsList.get(0);
+					points.setUpdateDate(new Date());
 					points.setPoints((points.getPoints() + 1));
 				} else {
 					points.setCreateDate(new Date());
+					points.setUpdateDate(new Date());
 					points.setPoints(1D);
 					points.setPointType(type);
 					points.setAccount(account);
@@ -127,9 +137,11 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 			AccountPoints group = new AccountPoints();
 			if(groupPointsList != null && groupPointsList.size() > 0) {
 				group = groupPointsList.get(0);
+				group.setUpdateDate(new Date());
 				group.setPoints(group.getPoints() + totalGroupPoints);
 			} else {
 				group.setCreateDate(new Date());
+				group.setUpdateDate(new Date());
 				group.setPoints(totalGroupPoints);
 				group.setPointType(type);
 				group.setAccount(accountService.load(1l));

@@ -9,12 +9,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.networking.entity.Account;
-import org.networking.entity.AccountPoints;
 import org.networking.entity.Member;
 import org.networking.entity.MemberEarning;
 import org.networking.entity.PointsSummaryHelper;
 import org.networking.entity.User;
-import org.networking.enums.PointType;
 import org.networking.repository.AccountRepository;
 import org.networking.repository.MemberRepository;
 import org.networking.service.AccountPointsService;
@@ -161,9 +159,10 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		for(Object[] obj : objs) {
 			PointsSummaryHelper p = new PointsSummaryHelper();
 			p.setAccountName((String)obj[0]);
-			p.setReferralPoints(((BigDecimal)obj[1]).longValue());
-			p.setProductPoints(((BigDecimal)obj[2]).longValue());
-			p.setGroupPoints(((BigDecimal)obj[3]).longValue());
+			p.setPersonalPoints(((BigDecimal)obj[1]).longValue());
+			p.setReferralPoints(((BigDecimal)obj[2]).longValue());
+			p.setProductPoints(((BigDecimal)obj[3]).longValue());
+			p.setGroupPoints(((BigDecimal)obj[4]).longValue());
 			summary.add(p);
 		}
 		return summary;

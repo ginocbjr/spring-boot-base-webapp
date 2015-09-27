@@ -1,7 +1,8 @@
 package org.networking.service.impl;
 
-import org.networking.entity.*;
+import org.networking.entity.Account;
 import org.networking.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service
 public class AccountServiceImpl extends BaseServiceImpl<Account> implements AccountService {
-
+	
+	@Autowired
 	@Override
 	protected void setRepository(JpaRepository<Account, Long> repository) {
 		this.repository = repository;

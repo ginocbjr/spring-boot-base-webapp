@@ -1,25 +1,17 @@
 package org.networking.web.controller;
 
+import java.util.Date;
+
 import org.networking.entity.Member;
-import org.networking.entity.Product;
 import org.networking.entity.SalesItem;
 import org.networking.entity.SalesOrder;
 import org.networking.service.AccountPointsService;
 import org.networking.service.MemberService;
 import org.networking.service.ProductService;
-import org.networking.service.SalesOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/admin/order")
@@ -47,6 +39,8 @@ public class OrderController extends BaseController<SalesOrder> {
 
         for(SalesItem item : salesOrder.getItems()) {
             item.setProduct(productService.load(item.getProductId()));
+            item.setCreateDate(new Date());
+            item.setUpdateDate(new Date());
         }
     }
 

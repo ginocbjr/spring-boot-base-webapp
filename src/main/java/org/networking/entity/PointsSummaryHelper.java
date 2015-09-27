@@ -8,6 +8,9 @@ public class PointsSummaryHelper {
 
     private String accountName;
     
+    // Sum of referral and product points
+    private Long personalPoints;
+    
     private Long referralPoints;
     
     private Long productPoints;
@@ -44,6 +47,14 @@ public class PointsSummaryHelper {
 
 	public void setGroupPoints(Long groupPoints) {
 		this.groupPoints = groupPoints;
+	}
+
+	public Long getPersonalPoints() {
+		return personalPoints;
+	}
+
+	public void setPersonalPoints(Long personalPoints) {
+		this.personalPoints = personalPoints;
 	}
 	
 }

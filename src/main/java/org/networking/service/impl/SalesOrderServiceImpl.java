@@ -1,5 +1,7 @@
 package org.networking.service.impl;
 
+import java.util.Date;
+
 import org.networking.entity.Product;
 import org.networking.entity.SalesItem;
 import org.networking.entity.SalesOrder;
@@ -39,6 +41,8 @@ public class SalesOrderServiceImpl extends BaseServiceImpl<SalesOrder> implement
             }
 
             order.setTotalGroupPoints(totalPoints - order.getTotalMemberPoints());
+            order.setCreateDate(new Date());
+            order.setUpdateDate(new Date());
         }
     }
 }
