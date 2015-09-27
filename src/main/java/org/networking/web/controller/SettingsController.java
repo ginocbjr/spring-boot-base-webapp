@@ -1,6 +1,9 @@
 package org.networking.web.controller;
 
-import org.networking.entity.Product;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.networking.entity.Settings;
 import org.networking.service.SettingsService;
 import org.springframework.stereotype.Controller;
@@ -8,10 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/admin/settings")

@@ -5,8 +5,7 @@ import java.util.List;
 
 import org.networking.entity.Member;
 import org.networking.entity.MemberEarning;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.networking.entity.PointsSummaryHelper;
 
 /**
  * Created by Sonny on 9/6/2015.
@@ -27,4 +26,6 @@ public interface MemberService extends BaseService<Member> {
 	List<MemberEarning> findMemberEarningsByDate(Date date);
 
 	void markEarningsAsClaimed(Long memberId, Long totalPoints, Double totalEarnings, Date date);
+	
+	List<PointsSummaryHelper> findAccountPointsByMember(String username);
 }

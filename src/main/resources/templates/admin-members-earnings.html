@@ -50,6 +50,9 @@
     <script type="text/javascript">
 	    $(document).ready(function() {
 	    	$('body').tooltip({selector: '.edit-action, .remove-action'});
+	    	setTimeout(function () {
+	    		$('tr:contains("DBLOC IBS")').hide();
+	    	}, 500);
 		});
 
     </script>
