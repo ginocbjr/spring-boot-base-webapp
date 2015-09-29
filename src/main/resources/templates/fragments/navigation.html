@@ -35,12 +35,12 @@
                     </li>
                     <li class="dropdown">
                     	<a href="#" class="home-link about-link dropdown-toggle" data-toggle="dropdown" 
-                    		th:classappend="${#httpServletRequest.getRequestURI() == '/account-settings' ? 'active':''}">
+                    		th:classappend="${#httpServletRequest.getRequestURI() == '/account-settings' || #httpServletRequest.getRequestURI() == '/admin/settings' ? 'active':''}">
                     		<i class="fa fa-gear"></i> <b class="caret"></b>
                     	</a>
                     	<ul class="dropdown-menu" style="margin-top: 5px">
 							<li class="home-link about-link">
-								<a href="account-settings">Account Settings</a>
+								<a href="/account-settings">Account Settings</a>
 							</li>
 							<li sec:authorize="hasRole('ADMIN')" class="divider"></li>
 							<li sec:authorize="hasRole('ADMIN')">
