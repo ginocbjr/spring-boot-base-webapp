@@ -10,7 +10,7 @@
     
     <div class="container" style="margin-top: 70px;" ng-controller="FormController" ng-init="init()">
 
-        <div class="row">
+        <div class="row" sec:authorize="hasRole('ADMIN')">
             <div class="content-box">
                 <div>
                     <div class="page-header">
@@ -45,6 +45,7 @@
                                     <!-- <i class="fa fa-trash-o remove-action" data-id="${member.id}" data-title="Delete" ng-click="delete(record.id, $index)"></i> -->
                                 </td>
                                 <td class="dbloc-controls">
+                                	<div class="hidden-complete-name hide" th:text="${member.completeName}"></div>
                                     <button type="button" class="btn btn-sm gold-button dbloc-add-account" data-toggle="modal" data-target="#addAccounts">Add Account/s</button>
                                 	<div class="hidden-username hide" th:text="${member.username}"></div>
                                 </td>
@@ -55,12 +56,22 @@
                 </div>
             </div>
         </div>
+        
+        <div class="row" sec:authorize="hasRole('USER')">
+            <div class="content-box">
+                <div>
+                    <div class="page-header">
+                        <p>Access denied.</p>
+                    </div>
+                </div>
+      		</div>
+    	</div>
     </div>
 
     <!-- Footer Fragment -->
     <footer th:replace="fragments/footer :: footer"></footer>
 
-    <div id="addAccounts" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Add Accounts" aria-hidden="true" data-username="0">
+    <div id="addAccounts" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Add Accounts" aria-hidden="true" data-username="0" data-backdrop="static" data-keyboard="false">
         <div class="vertical-alignment-helper">
             <div class="modal-dialog vertical-align-center">
                 <div class="modal-content">
@@ -70,6 +81,12 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" role="form">
+                        	<div class="form-group">  
+                                <label class="control-label col-xs-4">Member Name</label>
+                                <div class="col-xs-8" style="padding-top: 7px">
+                                    <span id="member-complete-name"></span>
+                                </div>
+                            </div>
                             <div class="form-group">  
                                 <label class="control-label col-xs-4">Number of Account/s</label>
                                 <div class="col-xs-2">
@@ -86,13 +103,31 @@
             </div>
         </div>
     </div>
+    
+    <div id="successful" class="modal fade" tabindex="-1">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-center"><i class="fa fa-check-circle"></i><span> Accounts successfully added</span></h4>
+                    </div>
+                    <div class="modal-footer" style="text-align: center;">
+                        <button id="successful-okay" class="btn btn-success">Okay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script type="text/javascript">
 	    $(document).ready(function() {
 	    	$('body').tooltip({selector: '.edit-action, .remove-action'});
 		}).on('click','.dbloc-add-account',function() {
+			$('input').val('');
 			var elem = $(this).siblings('.hidden-username');
 			$('#addAccounts').data('username',$(elem).text());
+			var completeName = $(this).siblings('.hidden-complete-name').text();
+			$('#member-complete-name').html(completeName);
 		}).on('click','#submit-add-accounts',function() {
             var url = window.location.href + '/addAccounts';
             $.ajax({url : url,
@@ -102,10 +137,17 @@
 					username : $('#addAccounts').data('username'), numAccounts : $('#num-of-accounts').val()
 				},
 				success : function(data) {
-					/* console.log(data);
-	                console.log('aaaaaaaa'); */
+					if(data.success == true) {
+						$('#addAccounts').modal('hide');
+						$('#successful').modal('show');
+						setTimeout(function () {
+							location.reload(true);
+			    		}, 3000);
+					}
 				}
 			});
+		}).on('click', '#successful-okay', function() {
+			location.reload(true);
 		});
 	    
 	    function editMember(elem) {

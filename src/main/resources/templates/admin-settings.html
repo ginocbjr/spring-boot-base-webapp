@@ -10,7 +10,7 @@
     
     <div class="container main-body" style="margin-top: 70px;" ng-controller="SettingsController" ng-init="init()">
 
-        <div class="row">
+        <div class="row" sec:authorize="hasRole('ADMIN')">
             <div class="content-box">
                 <div>
                     <div class="page-header">
@@ -92,7 +92,17 @@
                 </div>
             </div>
         </div>
-        <div th:replace="fragments/are-you-sure :: are-you-sure"></div>
+        <div th:replace="fragments/are-you-sure :: are-you-sure(message='Are you sure you want to delete record?')"></div>
+        
+        <div class="row" sec:authorize="hasRole('USER')">
+            <div class="content-box">
+                <div>
+                    <div class="page-header">
+                        <p>Access denied.</p>
+                    </div>
+                </div>
+      		</div>
+    	</div>
     </div>
 
     <!-- Footer Fragment -->

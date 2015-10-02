@@ -162,7 +162,7 @@ app.controller("ProductController", function($scope, $http, $controller) {
 app.controller("MemberEarningsController", function($scope, $http, $controller) {
     $controller('SettingsController', {$scope : $scope});
     $scope.records = [];
-   $scope.init = function() {
+  /* $scope.init = function() {
        $scope.findByKey('SETTINGS_EARNINGS_PER_POINT', function(){
            var url = window.location.href + '/members';
            $http({
@@ -173,7 +173,7 @@ app.controller("MemberEarningsController", function($scope, $http, $controller) 
                console.log($scope);
            });
        });
-   };
+   };*/
     $scope.markClaimed = function(index) {
       var record = $scope.records[index];
         if(record != null) {

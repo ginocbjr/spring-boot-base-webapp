@@ -393,6 +393,15 @@ span.help-inline {
     position: relative !important;
 }
 
+.bold {
+	font-weight: bold;
+}
+
+.alert-gold {
+    background-image: linear-gradient(rgb(229, 216, 72), rgb(198, 161, 50)) !important;
+    border-color: rgb(198, 161, 50);
+}
+
 @media screen and (min-width:768px) {
     .brand {
         display: inherit;
