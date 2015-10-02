@@ -17,4 +17,10 @@ public interface AccountPointsRepository extends JpaRepository<AccountPoints, Lo
 	@Query("select a from AccountPoints a where a.account.id = :accountId and date(a.createDate) = date(:date) and a.pointType = :type")
 	List<AccountPoints> findAccountPointsByAccountAndDateAndType(@Param(value = "accountId") Long accountId, @Param(value = "date") Date date,
 			@Param(value = "type") PointType type);
+	
+	@Query(value = "select sum(ap.points) from account_points ap "
+			+ " join account a on ap.account_id = a.id "
+			+ " join user u on u.id = a.member_id where member_id = :memberId",
+			nativeQuery = true)
+	Long getTotalAccountPointsByMember(@Param(value = "memberId") Long memberId);
 }

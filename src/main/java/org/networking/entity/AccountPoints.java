@@ -27,7 +27,7 @@ public class AccountPoints extends BaseEntity{
 	private PointType pointType;
 
 	@Column(name = "IS_CLAIMED")
-	private Boolean isClaimed;
+	private Boolean isClaimed = Boolean.FALSE;
 
 	@Column(name = "DATE_CLAIMED")
 	@Temporal(TemporalType.TIMESTAMP)

@@ -1,5 +1,7 @@
 package org.networking.service.impl;
 
+import java.util.Date;
+
 import org.networking.entity.EarningsHistory;
 import org.networking.entity.Member;
 import org.networking.service.EarningsHistoryService;
@@ -7,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
 
 /**
  * Created by Gino on 9/26/2015.
@@ -24,12 +24,14 @@ public class EarningsHistoryServiceImpl extends BaseServiceImpl<EarningsHistory>
     }
 
     @Override
-    public void createEarningsHistory(Member member, Long totalPoints, Double totalEarnings) {
+    public void createEarningsHistory(Member member, Long totalPoints, Double totalEarnings,
+    		Date startDate, Date endDate) {
         EarningsHistory eh = new EarningsHistory();
         eh.setMember(member);
         eh.setTotalPoints(totalPoints);
         eh.setTotalEarnings(totalEarnings);
-        eh.setDateClaimed(new Date());
+        eh.setStartDate(startDate);
+        eh.setEndDate(endDate);
         save(eh);
     }
 }

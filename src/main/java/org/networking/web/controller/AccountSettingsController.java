@@ -31,7 +31,7 @@ public class AccountSettingsController {
 	@RequestMapping(method = {RequestMethod.GET})
 	public String view(Model model, Principal principal) {
 		if(principal != null) {
-			model.addAttribute("member", memberService.findMemberByUsername(principal.getName()).get(0));
+			model.addAttribute("member", memberService.findMemberByUsername(principal.getName()));
 		}
         return "account-settings";
 	}
@@ -44,7 +44,7 @@ public class AccountSettingsController {
 			Principal principal) {
 		Map<String, Object> model = new HashMap<>();
 		if(principal != null) {
-			Member currentUser =  memberService.findMemberByUsername(principal.getName()).get(0);
+			Member currentUser =  memberService.findMemberByUsername(principal.getName());
 			currentUser.setFirstName(firstName);
 			currentUser.setLastName(lastName);
 			currentUser.setMiddleName(middleName);
@@ -89,7 +89,7 @@ public class AccountSettingsController {
 				}
 				model.put("errorList", errorList);
 			} else {
-				Member currentUser =  memberService.findMemberByUsername(principal.getName()).get(0);
+				Member currentUser =  memberService.findMemberByUsername(principal.getName());
 				if(newPassword.equals(confirmPassword)) {
 					currentUser.setPassword(new BCryptPasswordEncoder().encode(newPassword));
 					memberService.save(currentUser);

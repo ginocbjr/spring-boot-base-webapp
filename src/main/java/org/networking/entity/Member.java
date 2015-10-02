@@ -193,7 +193,9 @@ public class Member extends User{
 	}
 	
 	public String getCompleteName() {
-		return this.getFirstName() + " " + this.getLastName();
+		return this.getFirstName() + " " 
+				+ (this.getMiddleName()==null?"":(this.getMiddleName() + " "))
+				+ this.getLastName();
 	}
 	
 	public Long getReferrerId() {

@@ -1,6 +1,8 @@
 package org.networking.entity;
 
 import javax.persistence.*;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -9,7 +11,6 @@ import java.util.Date;
 @Entity
 @Table(name = "EARNINGS_HISTORY")
 public class EarningsHistory extends BaseEntity {
-
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
@@ -26,6 +27,21 @@ public class EarningsHistory extends BaseEntity {
 
     @Column(name = "TOTAL_EARNINGS")
     private Double totalEarnings;
+    
+    @Column(name = "START_DATE")
+    private Date startDate;
+    
+    @Column(name= "END_DATE")
+    private Date endDate;
+    
+    @Column(name = "IS_CLAIMED")
+	private Boolean isClaimed = Boolean.FALSE;
+    
+    @Transient
+    private String startDateDisplay;
+    
+    @Transient
+    private String endDateDisplay;
 
     public Member getMember() {
         return member;
@@ -66,4 +82,46 @@ public class EarningsHistory extends BaseEntity {
     public void setTotalEarnings(Double totalEarnings) {
         this.totalEarnings = totalEarnings;
     }
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	
+	public String getStartDateDisplay() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+		return startDate==null?"":dateFormat.format(startDate);
+	}
+
+	public void setStartDateDisplay(String startDateDisplay) {
+		this.startDateDisplay = startDateDisplay;
+	}
+
+	public String getEndDateDisplay() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+		return endDate==null?"":dateFormat.format(endDate);
+	}
+
+	public void setEndDateDisplay(String endDateDisplay) {
+		this.endDateDisplay = endDateDisplay;
+	}
+
+	public Boolean getIsClaimed() {
+		return isClaimed==null?false:isClaimed;
+	}
+
+	public void setIsClaimed(Boolean isClaimed) {
+		this.isClaimed = isClaimed;
+	}
 }

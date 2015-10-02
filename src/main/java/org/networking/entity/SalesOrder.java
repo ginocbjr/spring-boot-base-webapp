@@ -1,10 +1,19 @@
 package org.networking.entity;
 
-import org.networking.enums.PointType;
-
+import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 /**
  * Created by Jona on 9/05/2015.
@@ -25,6 +34,12 @@ public class SalesOrder extends BaseEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<SalesItem> items;
+	
+	@Column(name = "ORDER_DATE")
+    private Date orderDate;
+	
+	@Column(name = "ORDER_DATE_STR")
+	private String orderDateString;
 
 	@Transient
 	private Long totalMemberPoints;
@@ -78,6 +93,21 @@ public class SalesOrder extends BaseEntity {
 		this.totalGroupPoints = totalGroupPoints;
 	}
 
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public String getOrderDateString() {
+		return orderDateString;
+	}
+
+	public void setOrderDateString(String orderDateString) {
+		this.orderDateString = orderDateString;
+	}
 
 }
 

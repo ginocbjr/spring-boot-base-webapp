@@ -77,8 +77,8 @@ public class MemberValidator implements Validator {
     }
     
     private boolean idDuplicateUsername(String username) {
-    	List<Member> members = memberService.findMemberByUsername(username);
-    	if(members != null && members.size() > 0) {
+    	Member members = memberService.findMemberByUsername(username);
+    	if(members != null) {
     		return true;
     	}
     	return false;

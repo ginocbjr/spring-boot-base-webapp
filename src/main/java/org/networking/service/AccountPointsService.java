@@ -18,9 +18,11 @@ public interface AccountPointsService extends BaseService<AccountPoints> {
 
 	List<AccountPoints> findAll();
 
-	void createForReferral(Member referrer, Integer newAcctCount);
+	void createForReferral(Member referrer, Integer newAcctCount, Date date);
 
-	void createForProduct(SalesOrder order);
+	void createForProduct(SalesOrder order, Date date);
+	
+	Long getTotalAccountPointsByMember(Long memberId);
 }
 
 

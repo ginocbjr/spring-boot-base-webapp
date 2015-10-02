@@ -1,5 +1,7 @@
 package org.networking.web.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.networking.entity.Member;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping(value = "/admin/order")
 public class OrderController extends BaseController<SalesOrder> {
+	
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
     @Autowired
     private MemberService memberService;
@@ -42,11 +46,18 @@ public class OrderController extends BaseController<SalesOrder> {
             item.setCreateDate(new Date());
             item.setUpdateDate(new Date());
         }
+        
+        if(salesOrder.getOrderDateString() != null) {
+        	try {
+				salesOrder.setOrderDate(dateFormat.parse(salesOrder.getOrderDateString()));
+			} catch (ParseException e) {
+			}
+        }
     }
 
     @Override
     protected void postCreate(SalesOrder salesOrder) {
         //Create account points for the sales order
-        accountPointsService.createForProduct(salesOrder);
+        accountPointsService.createForProduct(salesOrder, salesOrder.getOrderDate());
     }
 }

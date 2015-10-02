@@ -1,5 +1,7 @@
 package org.networking.service;
 
+import java.util.Date;
+
 import org.networking.entity.EarningsHistory;
 import org.networking.entity.Member;
 
@@ -8,6 +10,6 @@ import org.networking.entity.Member;
  */
 public interface EarningsHistoryService extends BaseService<EarningsHistory> {
 
-    void createEarningsHistory(Member member, Long totalPoints, Double totalEarnings);
+    void createEarningsHistory(Member member, Long totalPoints, Double totalEarnings, Date startDate, Date endDate);
 
 }

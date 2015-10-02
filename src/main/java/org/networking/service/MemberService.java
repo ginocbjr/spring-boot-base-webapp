@@ -3,6 +3,7 @@ package org.networking.service;
 import java.util.Date;
 import java.util.List;
 
+import org.networking.entity.EarningsHistory;
 import org.networking.entity.Member;
 import org.networking.entity.MemberEarning;
 import org.networking.entity.PointsSummaryHelper;
@@ -17,15 +18,19 @@ public interface MemberService extends BaseService<Member> {
 	
 	Member getMemberById(Long id);
 
-	List<Member> findMemberByUsername(String username);
+	Member findMemberByUsername(String username);
 
 	List<Member> findByLastnameOrFirstnameLike(String keyString);
 
 	List<Member> findWithUnclaimed(Date date);
 
-	List<MemberEarning> findMemberEarningsByDate(Date date);
+	void saveEarningsHistoryByDate(Date date);
+	
+	MemberEarning findMemberEarningsByDateByUser(Date date, Long id);
 
-	void markEarningsAsClaimed(Long memberId, Long totalPoints, Double totalEarnings, Date date);
+	void markEarningsAsClaimed(Long memberId, Long totalPoints, Double totalEarnings, Date startDate, Date endDate);
 	
 	List<PointsSummaryHelper> findAccountPointsByMember(String username);
+	
+	List<EarningsHistory> findEarningsHistoryPerMember(Long memberId);
 }

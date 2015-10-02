@@ -1,5 +1,8 @@
 package org.networking.entity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Helper class for Member Earning page.
  * Created by Gino on 9/25/2015.
@@ -19,6 +22,14 @@ public class MemberEarning {
     private Double totalEarnings;
 
     private Boolean isClaimed;
+    
+    private Date startDate;
+    
+    private Date endDate;
+    
+    private String startDateDisplay;
+    
+    private String endDateDisplay;
 
     public Long getMemberId() {
         return memberId;
@@ -75,4 +86,38 @@ public class MemberEarning {
     public void setIsClaimed(Boolean isClaimed) {
         this.isClaimed = isClaimed;
     }
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getStartDateDisplay() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+		return startDate==null?"":dateFormat.format(startDate);
+	}
+
+	public void setStartDateDisplay(String startDateDisplay) {
+		this.startDateDisplay = startDateDisplay;
+	}
+
+	public String getEndDateDisplay() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+		return endDate==null?"":dateFormat.format(endDate);
+	}
+
+	public void setEndDateDisplay(String endDateDisplay) {
+		this.endDateDisplay = endDateDisplay;
+	}
 }

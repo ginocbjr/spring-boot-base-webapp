@@ -9,15 +9,18 @@ import java.util.Date;
 import java.util.List;
 
 import org.networking.entity.Account;
+import org.networking.entity.EarningsHistory;
 import org.networking.entity.Member;
 import org.networking.entity.MemberEarning;
 import org.networking.entity.PointsSummaryHelper;
+import org.networking.entity.Settings;
 import org.networking.entity.User;
 import org.networking.repository.AccountRepository;
 import org.networking.repository.MemberRepository;
 import org.networking.service.AccountPointsService;
 import org.networking.service.EarningsHistoryService;
 import org.networking.service.MemberService;
+import org.networking.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,6 +47,9 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 
 	@Autowired
 	private EarningsHistoryService earningsHistoryService;
+	
+	@Autowired
+	private SettingsService settingsService;
 
 	@Override
 	public Member create(Member member) {
@@ -73,8 +79,8 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		Integer accounts = member.getNumOfAccounts();
 
 		if(member.isNew()) {
-			member.setCreateDate(new Date());
-			member.setUpdateDate(new Date());
+			member.setCreateDate(member.getDateJoined());
+			member.setUpdateDate(member.getDateJoined());
 
 			if(accounts != null && accounts >= 1) {
 				for(int i = 1; i <= accounts; i++) {
@@ -89,6 +95,10 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 					} else {
 						account.setIsNext(false);
 					}
+					// For group points
+					if(i==1 && memberRepository.count() == 1) {
+						account.setIsNextForGroup(Boolean.TRUE);
+					}
 					accountRepository.save(account);
 				}
 			}
@@ -96,7 +106,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			
 			if(member.getReferrer() != null && member.getReferrer().getId() != 1) {
 				//Add points to referrer
-				accountPointsService.createForReferral(member, accounts);
+				accountPointsService.createForReferral(member, accounts, member.getDateJoined());
 			}
 		} else {
 			member.setUpdateDate(new Date());
@@ -115,43 +125,62 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		return memberRepository.getOne(id);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Member> findMemberByUsername(String username) {
+	public Member findMemberByUsername(String username) {
 		return memberRepository.findMemberByUsername(username);
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Member> findByLastnameOrFirstnameLike(String keyString){
 		return memberRepository.findByLastnameOrFirstnameLike("%" + keyString + "%");
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Member> findWithUnclaimed(Date date) {
 		return memberRepository.findWithUnclaimed(date);
 	}
 
 	@Override
-	public List<MemberEarning> findMemberEarningsByDate(Date date) {
-		List<MemberEarning> earnings = new ArrayList<>();
+	public void saveEarningsHistoryByDate(Date date) {
 		List<Object[]> objs = memberRepository.findMemberEarningsByDate(date);
 		for(Object[] obj : objs) {
+			earningsHistoryService.createEarningsHistory(this.load(((BigInteger)obj[0]).longValue()),
+					((BigDecimal)obj[1]).longValue(),
+					((BigDecimal)obj[1]).doubleValue() * settingsService.findByKey(Settings.SETTINGS_EARNINGS_PER_POINT).getNumberValue(),
+					(Date)obj[2],
+					(Date)obj[3]);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public MemberEarning findMemberEarningsByDateByUser(Date date, Long id) {
+		List<Object[]> objs = memberRepository.findMemberEarningsByDateByUser(date, id);
+		if(objs != null && objs.size() > 0) {
+			Object[] obj = objs.get(0);
 			MemberEarning me = new MemberEarning();
 			me.setMemberId(((BigInteger)obj[0]).longValue());
 			me.setFirstName((String)obj[1]);
 			me.setLastName((String)obj[2]);
 			me.setMiddleName((String)obj[3]);
 			me.setTotalPoints(((BigDecimal)obj[4]).longValue());
-			BigInteger bg = (BigInteger)obj[5];
-			if(bg != null && bg.intValue() == 1) {
+			Boolean bg = (Boolean)obj[5];
+			if(bg != null && bg) {
 				me.setIsClaimed(true);
 			} else {
 				me.setIsClaimed(false);
 			}
-			earnings.add(me);
+			me.setStartDate((Date)obj[6]);
+			me.setEndDate((Date)obj[7]);
+			return me;
 		}
-		return earnings;
+		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PointsSummaryHelper> findAccountPointsByMember(String username) {
 		List<PointsSummaryHelper> summary = new ArrayList<>();
@@ -165,14 +194,32 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			p.setGroupPoints(((BigDecimal)obj[4]).longValue());
 			summary.add(p);
 		}
+		
+		Member member = memberRepository.findMemberByUsername(username);
+		int size = summary.size();
+		if(member.getNumOfAccounts() != null && member.getNumOfAccounts() > size) {
+			int additional = member.getNumOfAccounts() - size;
+			for(int i = 1; i <= additional; i++) {
+				PointsSummaryHelper p = new PointsSummaryHelper();
+				p.setAccountName(username + "-" + (size + i));
+				p.setPersonalPoints(0l);
+				p.setReferralPoints(0l);
+				p.setProductPoints(0l);
+				p.setGroupPoints(0l);
+				summary.add(p);
+			}
+		}
 		return summary;
 	}
 
 	@Override
-	public void markEarningsAsClaimed(Long memberId, Long totalPoints, Double totalEarnings, Date date) {
-		memberRepository.updateAccountPointsAsClaimed(memberId, date);
-		Member member = memberRepository.findOne(memberId);
-		earningsHistoryService.createEarningsHistory(member, totalPoints, totalEarnings);
+	public void markEarningsAsClaimed(Long memberId, Long totalPoints, Double totalEarnings, Date startDate, Date endDate) {
+		memberRepository.updateAccountPointsAsClaimed(memberId, startDate, endDate);
+	}
+	
+	@Override
+	public List<EarningsHistory> findEarningsHistoryPerMember(Long memberId) {
+		return memberRepository.findEarningsHistoryPerMember(memberId);
 	}
 
 	@Autowired
@@ -181,4 +228,5 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		this.repository = repository;
 		memberRepository = (MemberRepository) repository;
 	}
+	
 }

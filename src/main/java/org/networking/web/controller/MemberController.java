@@ -87,7 +87,7 @@ public class MemberController extends BaseController<Member> {
 		Map<String, Object> model = new HashMap<>();
 		
 		if(username != null && numAccounts != null) {
-			Member member = memberService.findMemberByUsername(username).get(0);
+			Member member = memberService.findMemberByUsername(username);
 			member.setNumOfAccounts(member.getNumOfAccounts() + numAccounts);
 			if(numAccounts != null && numAccounts >= 1) {
 				for(int i = 1; i <= numAccounts; i++) {
@@ -116,7 +116,7 @@ public class MemberController extends BaseController<Member> {
 			
 			if(member.getReferrer() != null && member.getReferrer().getId() != 1) {
 				//Add points to referrer
-				accountPointsService.createForReferral(member, numAccounts);
+				accountPointsService.createForReferral(member, numAccounts,member.getDateJoined());
 			}
 			
 			memberService.save(member);

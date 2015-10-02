@@ -33,7 +33,10 @@ public class Account extends BaseEntity {
 	private Long memberId;
 	
 	@Column(name = "IS_NEXT")
-	private Boolean isNext;
+	private Boolean isNext = Boolean.FALSE;
+	
+	@Column(name = "IS_NEXT_FOR_GROUP")
+	private Boolean isNextForGroup = Boolean.FALSE;
 
 	public Member getMember() {
 		return member;
@@ -73,5 +76,13 @@ public class Account extends BaseEntity {
 
 	public void setMemberId(Long memberId) {
 		this.memberId = memberId;
+	}
+
+	public Boolean getIsNextForGroup() {
+		return isNextForGroup;
+	}
+
+	public void setIsNextForGroup(Boolean isNextForGroup) {
+		this.isNextForGroup = isNextForGroup;
 	}
 }
