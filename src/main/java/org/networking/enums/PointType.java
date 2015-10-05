@@ -6,4 +6,5 @@ package org.networking.enums;
 public enum PointType {
     REFERRAL,
     GROUP,
-    PRODUCT }
+    PRODUCT,
+    MATURITY }

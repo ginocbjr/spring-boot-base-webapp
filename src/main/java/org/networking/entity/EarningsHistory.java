@@ -37,6 +37,12 @@ public class EarningsHistory extends BaseEntity {
     @Column(name = "IS_CLAIMED")
 	private Boolean isClaimed = Boolean.FALSE;
     
+    @Column(name = "HAS_MATURITY")
+    private Boolean hasMaturity = Boolean.FALSE;
+    
+    @Column(name = "MATURITY_POINTS")
+    private Long maturityPoints;
+    
     @Transient
     private String startDateDisplay;
     
@@ -123,5 +129,21 @@ public class EarningsHistory extends BaseEntity {
 
 	public void setIsClaimed(Boolean isClaimed) {
 		this.isClaimed = isClaimed;
+	}
+
+	public Boolean getHasMaturity() {
+		return hasMaturity;
+	}
+
+	public void setHasMaturity(Boolean hasMaturity) {
+		this.hasMaturity = hasMaturity;
+	}
+
+	public Long getMaturityPoints() {
+		return maturityPoints;
+	}
+
+	public void setMaturityPoints(Long maturityPoints) {
+		this.maturityPoints = maturityPoints;
 	}
 }

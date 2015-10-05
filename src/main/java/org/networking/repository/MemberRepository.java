@@ -53,8 +53,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 			+ " FROM (SELECT (date(:date) - INTERVAL daysbacktotuesday DAY) start_tuesday "
 			+ " FROM (SELECT SUBSTR('5601234',wkndx,1) daysbacktotuesday "
 			+ " FROM (SELECT DAYOFWEEK(dt) wkndx FROM (SELECT date(:date) dt) AAAA) AAA) AA) A) M "
-			+ " WHERE ap.createdate >= tuesday "
-			+ " AND ap.createdate <= monday "
+			+ " WHERE DATE(ap.createdate) >= tuesday "
+			+ " AND DATE(ap.createdate) <= monday "
+			+ " AND ap.point_type <> 'MATURITY' "
 			+ " group by u.id", nativeQuery = true)
 	List<Object[]> findMemberEarningsByDate(@Param(value = "date")Date date);
 	
@@ -69,9 +70,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 			+ " FROM (SELECT (date(:date) - INTERVAL daysbacktotuesday DAY) start_tuesday "
 			+ " FROM (SELECT SUBSTR('5601234',wkndx,1) daysbacktotuesday "
 			+ " FROM (SELECT DAYOFWEEK(dt) wkndx FROM (SELECT date(:date) dt) AAAA) AAA) AA) A) M "
-			+ " WHERE ap.createdate >= tuesday "
-			+ " AND ap.createdate <= monday "
-			+ " AND u.id = :id"
+			+ " WHERE DATE(ap.createdate) >= tuesday "
+			+ " AND DATE(ap.createdate) <= monday "
+			+ " AND u.id = :id "
+			+ " AND ap.point_type <> 'MATURITY' "
 			+ " group by u.id", nativeQuery = true)
 	List<Object[]> findMemberEarningsByDateByUser(@Param(value = "date")Date date, @Param(value = "id")Long id);
 
@@ -99,4 +101,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	
 	@Query("select e from EarningsHistory e where e.memberId = :memberId order by e.startDate desc")
 	List<EarningsHistory> findEarningsHistoryPerMember(@Param(value = "memberId") Long memberId);
+	
+	@Query(value="SELECT if(sum(ap.points) is null, 0, sum(ap.points)) as totalPoints "
+			+ " from ACCOUNT_POINTS ap "
+			+ " join ACCOUNT a on a.id = ap.account_id "
+			+ " WHERE a.member_id = :memberId "
+			+ " AND date(ap.createdate) >= date(:startDate) "
+			+ " AND date(ap.createdate) <= date(:endDate) "
+			+ " AND ap.point_type = 'MATURITY'", nativeQuery = true)
+	Long getMaturityPointsByMemberByDate(@Param(value = "memberId") Long memberId, @Param(value = "startDate") Date startDate, @Param(value = "endDate") Date endDate);
 }

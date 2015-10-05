@@ -10,6 +10,6 @@ import org.networking.entity.Member;
  */
 public interface EarningsHistoryService extends BaseService<EarningsHistory> {
 
-    void createEarningsHistory(Member member, Long totalPoints, Double totalEarnings, Date startDate, Date endDate);
+    void createEarningsHistory(Member member, Long totalPoints, Double totalEarnings, Date startDate, Date endDate, Long maturityPoints);
 
 }

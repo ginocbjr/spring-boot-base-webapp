@@ -147,19 +147,21 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	public void saveEarningsHistoryByDate(Date date) {
 		List<Object[]> objs = memberRepository.findMemberEarningsByDate(date);
 		for(Object[] obj : objs) {
+			Long maturityPoints = memberRepository.getMaturityPointsByMemberByDate(((BigInteger)obj[0]).longValue(),
+					(Date)obj[2], (Date)obj[3]);
 			earningsHistoryService.createEarningsHistory(this.load(((BigInteger)obj[0]).longValue()),
 					((BigDecimal)obj[1]).longValue(),
 					((BigDecimal)obj[1]).doubleValue() * settingsService.findByKey(Settings.SETTINGS_EARNINGS_PER_POINT).getNumberValue(),
 					(Date)obj[2],
-					(Date)obj[3]);
+					(Date)obj[3], maturityPoints);
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public MemberEarning findMemberEarningsByDateByUser(Date date, Long id) {
 		List<Object[]> objs = memberRepository.findMemberEarningsByDateByUser(date, id);
 		if(objs != null && objs.size() > 0) {
+			Long maturityPoints = memberRepository.getMaturityPointsByMemberByDate(id, (Date)(objs.get(0)[6]), (Date)(objs.get(0)[6]));
 			Object[] obj = objs.get(0);
 			MemberEarning me = new MemberEarning();
 			me.setMemberId(((BigInteger)obj[0]).longValue());
@@ -175,6 +177,8 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			}
 			me.setStartDate((Date)obj[6]);
 			me.setEndDate((Date)obj[7]);
+			me.setHasMaturity((maturityPoints!=null&&maturityPoints>0)?Boolean.TRUE:Boolean.FALSE);
+			me.setMaturityPoints(maturityPoints);
 			return me;
 		}
 		return null;

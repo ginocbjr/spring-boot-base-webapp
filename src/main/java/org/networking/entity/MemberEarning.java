@@ -3,6 +3,8 @@ package org.networking.entity;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.persistence.Column;
+
 /**
  * Helper class for Member Earning page.
  * Created by Gino on 9/25/2015.
@@ -26,6 +28,10 @@ public class MemberEarning {
     private Date startDate;
     
     private Date endDate;
+    
+    private Boolean hasMaturity;
+    
+    private Long maturityPoints;
     
     private String startDateDisplay;
     
@@ -119,5 +125,21 @@ public class MemberEarning {
 
 	public void setEndDateDisplay(String endDateDisplay) {
 		this.endDateDisplay = endDateDisplay;
+	}
+
+	public Boolean getHasMaturity() {
+		return hasMaturity;
+	}
+
+	public void setHasMaturity(Boolean hasMaturity) {
+		this.hasMaturity = hasMaturity;
+	}
+
+	public Long getMaturityPoints() {
+		return maturityPoints;
+	}
+
+	public void setMaturityPoints(Long maturityPoints) {
+		this.maturityPoints = maturityPoints;
 	}
 }

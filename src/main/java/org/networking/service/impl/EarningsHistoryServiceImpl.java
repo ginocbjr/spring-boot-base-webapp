@@ -25,13 +25,15 @@ public class EarningsHistoryServiceImpl extends BaseServiceImpl<EarningsHistory>
 
     @Override
     public void createEarningsHistory(Member member, Long totalPoints, Double totalEarnings,
-    		Date startDate, Date endDate) {
+    		Date startDate, Date endDate, Long maturityPoints) {
         EarningsHistory eh = new EarningsHistory();
         eh.setMember(member);
         eh.setTotalPoints(totalPoints);
         eh.setTotalEarnings(totalEarnings);
         eh.setStartDate(startDate);
         eh.setEndDate(endDate);
+        eh.setMaturityPoints(maturityPoints);
+        eh.setHasMaturity((maturityPoints!=null&&maturityPoints>0)?Boolean.FALSE:Boolean.TRUE);
         save(eh);
     }
 }

@@ -94,6 +94,25 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 		if(accountList != null &&  accountSize >= 1) {
 			for(int i = 1; i <= totalPointsForDistribution; i++) {
 				Account account = accountList.get(currentAccount);
+				
+				// If divisible by maturity incentive required points, add AccountPoint with type MATURITY
+				if(( (account.getTotalPoints()+1) % settingsService.findByKey(Settings.SETTINGS_MATURITY_INCENTIVE_REQUIRED_POINTS).getNumberValue() ) == 0) {
+					List<AccountPoints> accountPointsList = this.findAccountPointsByAccountAndDateAndType(account.getId(), new Date(), PointType.MATURITY);
+					AccountPoints points = new AccountPoints();
+					if(accountPointsList != null && accountPointsList.size() > 0) {
+						points = accountPointsList.get(0);
+						points.setUpdateDate(date);
+						points.setPoints((points.getPoints() + 1));
+					} else {
+						points.setCreateDate(date);
+						points.setUpdateDate(date);
+						points.setPoints(1D);
+						points.setPointType(PointType.MATURITY);
+						points.setAccount(account);
+					}
+					this.create(points);
+				}
+				
 				account.setTotalPoints(account.getTotalPoints() + 1);
 
 				// If currentAccount is already equal to the index of the last account in the list, go back to zero
@@ -116,7 +135,14 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 				accountService.save(account);
 
 				// Create/Update account points
-				List<AccountPoints> accountPointsList = this.findAccountPointsByAccountAndDateAndType(account.getId(), new Date(), type);
+				Long accountId = account.getId();
+				Long pointsForTheDay = accountPointsRepository.getTotalAccountPointsByMemberByDate(account.getId(), new Date());
+				if(pointsForTheDay >= settingsService.findByKey(Settings.SETTINGS_MAXIMUM_POINTS_PER_DAY).getNumberValue()) {
+					accountId = 1l;
+					type = PointType.GROUP;
+				}
+				
+				List<AccountPoints> accountPointsList = this.findAccountPointsByAccountAndDateAndType(accountId, new Date(), type);
 				AccountPoints points = new AccountPoints();
 				if(accountPointsList != null && accountPointsList.size() > 0) {
 					points = accountPointsList.get(0);
