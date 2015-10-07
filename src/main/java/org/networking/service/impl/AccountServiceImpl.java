@@ -35,11 +35,11 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 
 	@Override
 	public void distributeGroupPoints(Date date) {
-		List<Account> activeList = accountRepository.getActiveAccountsToday();
+		List<Account> activeList = accountRepository.getActiveAccountsToday(date);
 		if(activeList != null) {
 			int accountSize = activeList.size();
 			int currentAccount = 0;
-			Long totalPoints = accountRepository.totalPointsForDistribution();
+			Long totalPoints = accountRepository.totalPointsForDistribution(date);
 			
 			for(Account acct : activeList) {
 				// get next account
@@ -48,7 +48,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 				}
 				currentAccount++;
 			}
-			
+			if(totalPoints != null) {
 			for(int i = 1; i <= totalPoints; i++) {
 				Account account = activeList.get(currentAccount);
 				if(account.getId() != 1) {
@@ -74,7 +74,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 					this.save(account);
 	
 					// Create/Update account points
-					List<AccountPoints> accountPointsList = accountPointsService.findAccountPointsByAccountAndDateAndType(account.getId(), new Date(), PointType.GROUP);
+					List<AccountPoints> accountPointsList = accountPointsService.findAccountPointsByAccountAndDateAndType(account.getId(), date, PointType.GROUP);
 					AccountPoints points = new AccountPoints();
 					if(accountPointsList != null && accountPointsList.size() > 0) {
 						points = accountPointsList.get(0);
@@ -93,7 +93,9 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 					currentAccount++;
 				}
 			}
+			}
 		}
+		accountRepository.markGroupPointsAsDistributed(date);
 	}
 
 }

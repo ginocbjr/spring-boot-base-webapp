@@ -1,17 +1,21 @@
 package org.networking.web.controller;
 
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.networking.entity.Member;
 import org.networking.entity.SalesItem;
 import org.networking.entity.SalesOrder;
+import org.networking.repository.SalesOrderRepository;
 import org.networking.service.AccountPointsService;
 import org.networking.service.MemberService;
 import org.networking.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -29,9 +33,15 @@ public class OrderController extends BaseController<SalesOrder> {
 
     @Autowired
     private AccountPointsService accountPointsService;
+    
+    @Autowired
+	private SalesOrderRepository salesOrderRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getView() {
+    public String getView(Model model) {
+    	NumberFormat n = NumberFormat.getCurrencyInstance(); 
+    	model.addAttribute("totalSales", (salesOrderRepository.getTotalSales()==null?0:(n.format(salesOrderRepository.getTotalSales()).replace("$", "Php "))));
+    	model.addAttribute("weeklyTotalSales", (salesOrderRepository.getWeekTotalSales()==null?0:(n.format(salesOrderRepository.getWeekTotalSales()).replace("$", "Php "))));
         return "admin-order";
     }
 

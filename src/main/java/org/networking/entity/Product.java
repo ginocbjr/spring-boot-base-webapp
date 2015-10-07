@@ -19,6 +19,9 @@ public class Product extends BaseEntity{
 	@Column(name="PRICE")
 	private Double price;
 	
+	@Column(name="MEMBER_PRICE")
+	private Double memberPrice;
+	
 	@Column(name="POINTS")
 	private Double points;
 
@@ -77,6 +80,14 @@ public class Product extends BaseEntity{
 
 	public void setMemberPointsType(MemberPointsType memberPointsType) {
 		this.memberPointsType = memberPointsType;
+	}
+
+	public Double getMemberPrice() {
+		return memberPrice;
+	}
+
+	public void setMemberPrice(Double memberPrice) {
+		this.memberPrice = memberPrice;
 	}
 
 }

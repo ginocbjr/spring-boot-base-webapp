@@ -36,7 +36,7 @@
 		                </div>
 		                
 		                <p>This week's earnings</p>
-                		<table class="table table-striped table-bordered table-hover">
+                		<table class="table table-striped table-bordered table-hover" th:if="${currentEarning != null}">
 	                        <thead>
 	                            <tr>
 	                                <th style="width: 25%">Start Date</th>
@@ -50,13 +50,24 @@
 	                            	<td th:text="${currentEarning.startDateDisplay}"></td>
 	                            	<td th:text="${currentEarning.endDateDisplay}"></td>
 	                            	<td th:text="${currentEarning.totalPoints}"></td>
-	                            	<td th:text="${multiplier * currentEarning.totalPoints}"></td>
+	                            	<td>
+	                            		<div class="bold" style="font-size: 1.25em">Php <span th:text="${multiplier * currentEarning.totalPoints}"></span></div>
+	                            		<div th:if="${currentEarning.maturityPoints > 0}">
+	                            			<span class="label label-success" style="font-size: 1em">
+	                            				+<span th:text="${currentEarning.maturityPoints}"></span> Maturity Incentive
+	                            				 (+Php <span th:text="${currentEarning.maturityPoints * maturityValue}"></span>)
+	                            			</span>
+	                            		</div>
+	                            	</td>
 	                            </tr>
 	                        </tbody>
 	                    </table>
+	                    <div class="dbloc-table text-center" th:if="${currentEarning == null}">
+		                	<p>No earnings the week yet.</p>
+		                </div>
 		                    
                 		<p>Ready for release</p>
-	                    <table class="table table-striped table-bordered table-hover">
+	                    <table class="table table-striped table-bordered table-hover" th:if="${memberEarnings != null}">
 	                        <thead>
 	                            <tr>
 	                                <th style="width: 20%">Start Date</th>
@@ -73,7 +84,15 @@
 	                        		<td th:text="${record.startDateDisplay}"></td>
 	                                <td th:text="${record.endDateDisplay}"></td>
 	                                <td th:text="${record.totalPoints}"></td>
-	                                <td th:text="${multiplier * record.totalPoints}"></td>
+	                                <td>
+	                                	<div class="bold" style="font-size: 1.25em">Php <span th:text="${multiplier * record.totalPoints}"></span></div>
+	                            		<div th:if="${record.maturityPoints > 0}">
+	                            			<span class="label label-success" style="font-size: 1em">
+	                            				+<span th:text="${record.maturityPoints}"></span> Maturity Incentive
+	                            				 (+Php <span th:text="${record.maturityPoints * maturityValue}"></span>)
+	                            			</span>
+	                            		</div>
+	                                </td>
 	                                <td th:if="${record.isClaimed}">
 	                                	<span class="label label-success">RELEASED</span>
 	                                </td>
@@ -84,6 +103,9 @@
 	                        	</th:block>
 	                        </tbody>
 	                    </table>
+	                    <div class="dbloc-table text-center" th:if="${memberEarnings == null}">
+		                	<p>No earnings yet.</p>
+		                </div>
                     </div>
                 </div>
 

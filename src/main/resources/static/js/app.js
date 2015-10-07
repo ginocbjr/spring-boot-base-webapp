@@ -108,7 +108,7 @@ app.controller("OrderController", function($scope, $http, $controller){
     $scope.productSelected = function(selected) {
         var items = $scope.formData.items;
         items[this.$parent.$index].productId = selected.originalObject.id;
-        items[this.$parent.$index].productPrice = selected.originalObject.price;
+        items[this.$parent.$index].productPrice = selected.originalObject.memberPrice;
         $scope.quantityChanged(this.$parent.$index);
     };
 

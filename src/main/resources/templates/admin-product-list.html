@@ -90,6 +90,19 @@
                                         </ng-messages>
                                     </div>
                                 </div>
+                                <div class="form-group" ng-class="{ 'has-error' : form.memberPrice.$invalid &amp;&amp; (form.memberPrice.$touched || submitted)}">
+                                    <label class="control-label col-xs-4">Member Price</label>
+                                    <div class="col-xs-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Php</span>
+                                            <input type="text" class="form-control col-xs-6 money" id="memberPrice" name="memberPrice" ng-model="formData.memberPrice" ng-pattern="/\d+/" required="required" />
+                                            <span class="input-group-addon">.00</span>
+                                        </div>
+                                        <ng-messages class="help-block" for="form.memberPrice.$error" ng-if="form.memberPrice.$touched || submitted">
+                                            <div ng-messages-include="/messages"></div>
+                                        </ng-messages>
+                                    </div>
+                                </div>
                                 <div class="form-group" ng-class="{ 'has-error' : form.points.$invalid &amp;&amp; (form.price.$touched || submitted) }">
                                     <label class="control-label col-xs-4">Points</label>
                                     <div class="col-xs-8">

@@ -1,5 +1,7 @@
 package org.networking.web.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/admin/member")
 public class MemberController extends BaseController<Member> {
+	
+	private static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 	
 	@Autowired
 	private MemberService memberService;
@@ -83,7 +87,7 @@ public class MemberController extends BaseController<Member> {
     
     // Add new accounts
     @RequestMapping(value = "/addAccounts", produces = "application/json", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> addAccounts(@RequestParam String username, @RequestParam Integer numAccounts) {
+	public @ResponseBody Map<String, Object> addAccounts(@RequestParam String username, @RequestParam Integer numAccounts, @RequestParam String date) {
 		Map<String, Object> model = new HashMap<>();
 		
 		if(username != null && numAccounts != null) {
@@ -92,9 +96,14 @@ public class MemberController extends BaseController<Member> {
 			if(numAccounts != null && numAccounts >= 1) {
 				for(int i = 1; i <= numAccounts; i++) {
 					Account account = new Account();
-					account.setCreateDate(new Date());
-					account.setUpdateDate(new Date());
-					account.setDateActivated(new Date());
+					try {
+						account.setCreateDate(dateTimeFormat.parse(date));
+						account.setUpdateDate(dateTimeFormat.parse(date));
+						account.setDateActivated(dateTimeFormat.parse(date));
+					} catch (ParseException e) {
+						model.put("success", false);
+						return model;
+					}
 					account.setMember(member);
 					account.setTotalPoints(0d);
 					if(i == 1) {
@@ -116,7 +125,12 @@ public class MemberController extends BaseController<Member> {
 			
 			if(member.getReferrer() != null && member.getReferrer().getId() != 1) {
 				//Add points to referrer
-				accountPointsService.createForReferral(member, numAccounts,member.getDateJoined());
+				try {
+					accountPointsService.createForReferral(member, numAccounts, dateTimeFormat.parse(date));
+				} catch (ParseException e) {
+					model.put("success", false);
+					return model;
+				}
 			}
 			
 			memberService.save(member);

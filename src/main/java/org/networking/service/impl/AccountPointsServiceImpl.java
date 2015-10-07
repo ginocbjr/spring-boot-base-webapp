@@ -97,7 +97,7 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 				
 				// If divisible by maturity incentive required points, add AccountPoint with type MATURITY
 				if(( (account.getTotalPoints()+1) % settingsService.findByKey(Settings.SETTINGS_MATURITY_INCENTIVE_REQUIRED_POINTS).getNumberValue() ) == 0) {
-					List<AccountPoints> accountPointsList = this.findAccountPointsByAccountAndDateAndType(account.getId(), new Date(), PointType.MATURITY);
+					List<AccountPoints> accountPointsList = this.findAccountPointsByAccountAndDateAndType(account.getId(), date, PointType.MATURITY);
 					AccountPoints points = new AccountPoints();
 					if(accountPointsList != null && accountPointsList.size() > 0) {
 						points = accountPointsList.get(0);
@@ -136,13 +136,15 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 
 				// Create/Update account points
 				Long accountId = account.getId();
-				Long pointsForTheDay = accountPointsRepository.getTotalAccountPointsByMemberByDate(account.getId(), new Date());
+				Long pointsValue= accountPointsRepository.getTotalAccountPointsByAccountByDate(account.getId(), date);
+				Long pointsForTheDay = pointsValue==null?0:pointsValue;
 				if(pointsForTheDay >= settingsService.findByKey(Settings.SETTINGS_MAXIMUM_POINTS_PER_DAY).getNumberValue()) {
 					accountId = 1l;
-					type = PointType.GROUP;
 				}
 				
-				List<AccountPoints> accountPointsList = this.findAccountPointsByAccountAndDateAndType(accountId, new Date(), type);
+				PointType typeValue = accountId==1l?PointType.GROUP:type;
+				
+				List<AccountPoints> accountPointsList = this.findAccountPointsByAccountAndDateAndType(accountId, date, typeValue);
 				AccountPoints points = new AccountPoints();
 				if(accountPointsList != null && accountPointsList.size() > 0) {
 					points = accountPointsList.get(0);
@@ -152,24 +154,24 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 					points.setCreateDate(date);
 					points.setUpdateDate(date);
 					points.setPoints(1D);
-					points.setPointType(type);
+					points.setPointType(typeValue);
 					points.setAccount(account);
 				}
 				this.create(points);
 			}
 
 			// Create/Update group points
-			List<AccountPoints> groupPointsList = this.findAccountPointsByAccountAndDateAndType(1l, new Date(), type);
+			List<AccountPoints> groupPointsList = this.findAccountPointsByAccountAndDateAndType(1l, date, PointType.GROUP);
 			AccountPoints group = new AccountPoints();
 			if(groupPointsList != null && groupPointsList.size() > 0) {
 				group = groupPointsList.get(0);
-				group.setUpdateDate(new Date());
+				group.setUpdateDate(date);
 				group.setPoints(group.getPoints() + totalGroupPoints);
 			} else {
-				group.setCreateDate(new Date());
-				group.setUpdateDate(new Date());
+				group.setCreateDate(date);
+				group.setUpdateDate(date);
 				group.setPoints(totalGroupPoints);
-				group.setPointType(type);
+				group.setPointType(PointType.GROUP);
 				group.setAccount(accountService.load(1l));
 			}
 			this.create(group);

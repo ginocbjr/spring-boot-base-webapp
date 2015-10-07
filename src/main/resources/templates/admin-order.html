@@ -19,6 +19,8 @@
 
                 <div class="dbloc-table">
                     <div>
+                    	<p th:if="${totalSales != null}"><span class="bold">Total Sales: </span><span th:text="${totalSales}"></span></p>
+                    	<p th:if="${weeklyTotalSales != null}"><span class="bold">Total Sales for the week: </span><span th:text="${weeklyTotalSales}"></span></p>
                         <button id="order-products" type="button" class="btn gold-button dbloc-add" data-toggle="modal" data-target="#form-body">
                             <i class="fa fa-shopping-cart"></i> Order Products
                         </button>
@@ -26,13 +28,15 @@
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th style="width: 35%">Member Name</th>
-                                <th style="width: 45%">Products Ordered</th>
+                            	<th style="width: 15%">Date</th>
+                                <th style="width: 30%">Member Name</th>
+                                <th style="width: 35%">Products Ordered</th>
                                 <th style="width: 20%">Amount Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="record in records">
+                            	<td>{{record.orderDateString}}</td>
                                 <td>{{record.seller.completeName}}</td>
                                 <td>
                                     <ul class="order-details">
@@ -40,7 +44,7 @@
                                     </ul>
                                 </td>
                                 <td>
-                                    {{record.totalPrice}}
+                                    {{record.totalPriceDisplay}}
                                 </td>
                             </tr>
                         </tbody>

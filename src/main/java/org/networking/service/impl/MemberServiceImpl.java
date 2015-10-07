@@ -85,9 +85,9 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			if(accounts != null && accounts >= 1) {
 				for(int i = 1; i <= accounts; i++) {
 					Account account = new Account();
-					account.setCreateDate(new Date());
-					account.setUpdateDate(new Date());
-					account.setDateActivated(new Date());
+					account.setCreateDate(member.getDateJoined());
+					account.setUpdateDate(member.getDateJoined());
+					account.setDateActivated(member.getDateJoined());
 					account.setMember(member);
 					account.setTotalPoints(0d);
 					if(i == 1) {
@@ -150,8 +150,8 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			Long maturityPoints = memberRepository.getMaturityPointsByMemberByDate(((BigInteger)obj[0]).longValue(),
 					(Date)obj[2], (Date)obj[3]);
 			earningsHistoryService.createEarningsHistory(this.load(((BigInteger)obj[0]).longValue()),
-					((BigDecimal)obj[1]).longValue(),
-					((BigDecimal)obj[1]).doubleValue() * settingsService.findByKey(Settings.SETTINGS_EARNINGS_PER_POINT).getNumberValue(),
+					((Double)obj[1]).longValue(),
+					((Double)obj[1]) * settingsService.findByKey(Settings.SETTINGS_EARNINGS_PER_POINT).getNumberValue(),
 					(Date)obj[2],
 					(Date)obj[3], maturityPoints);
 		}
@@ -168,7 +168,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 			me.setFirstName((String)obj[1]);
 			me.setLastName((String)obj[2]);
 			me.setMiddleName((String)obj[3]);
-			me.setTotalPoints(((BigDecimal)obj[4]).longValue());
+			me.setTotalPoints(((Double)obj[4]).longValue());
 			Boolean bg = (Boolean)obj[5];
 			if(bg != null && bg) {
 				me.setIsClaimed(true);
@@ -192,10 +192,10 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		for(Object[] obj : objs) {
 			PointsSummaryHelper p = new PointsSummaryHelper();
 			p.setAccountName((String)obj[0]);
-			p.setPersonalPoints(((BigDecimal)obj[1]).longValue());
-			p.setReferralPoints(((BigDecimal)obj[2]).longValue());
-			p.setProductPoints(((BigDecimal)obj[3]).longValue());
-			p.setGroupPoints(((BigDecimal)obj[4]).longValue());
+			p.setPersonalPoints(((Double)obj[1]).longValue());
+			p.setReferralPoints(((Double)obj[2]).longValue());
+			p.setProductPoints(((Double)obj[3]).longValue());
+			p.setGroupPoints(((Double)obj[4]).longValue());
 			summary.add(p);
 		}
 		

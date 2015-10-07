@@ -1,5 +1,6 @@
 package org.networking.entity;
 
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -12,8 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonView;
 
 /**
  * Created by Jona on 9/05/2015.
@@ -107,6 +106,14 @@ public class SalesOrder extends BaseEntity {
 
 	public void setOrderDateString(String orderDateString) {
 		this.orderDateString = orderDateString;
+	}
+	
+	public String getTotalPriceDisplay() {
+		if(this.getTotalPrice() != null) {
+			NumberFormat n = NumberFormat.getCurrencyInstance(); 
+			return n.format(this.getTotalPrice()).replace("$", "Php ");
+		}
+		return null;
 	}
 
 }

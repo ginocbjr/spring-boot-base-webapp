@@ -46,6 +46,7 @@ public class MembersEarningsController {
 	    model.addAttribute("multiplier", settingsService.findByKey(Settings.SETTINGS_EARNINGS_PER_POINT).getNumberValue());
 	    model.addAttribute("memberName", selected.getCompleteName());
 	    model.addAttribute("currentEarning", memberService.findMemberEarningsByDateByUser(new Date(),id));
+	    model.addAttribute("maturityValue", settingsService.findByKey(Settings.SETTINGS_MATURITY_INCENTIVE_VALUE).getNumberValue());
 	    return "admin-members-earnings";
 	}
 	
