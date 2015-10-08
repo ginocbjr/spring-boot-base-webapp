@@ -26,6 +26,8 @@ public class SalesOrderServiceImpl extends BaseServiceImpl<SalesOrder> implement
 
     @Override
     public void setPoints(SalesOrder order){
+    	long overallPoints = 0l;
+    	long overallGroupPoints = 0l;
         for (SalesItem item : order.getItems()){
             Product.MemberPointsType type = item.getProduct().getMemberPointsType();
             Double totalPoints = item.getProduct().getPoints();
@@ -33,14 +35,18 @@ public class SalesOrderServiceImpl extends BaseServiceImpl<SalesOrder> implement
 
             if(type.equals(Product.MemberPointsType.PERCENTAGE)){
                 Double points  = totalPoints * (memberPoints / 100);
-                order.setTotalMemberPoints(points.longValue());
+                overallPoints += (points.longValue() * item.getQuantity());
+                overallGroupPoints += ((totalPoints*item.getQuantity()) - points);
+                order.setTotalMemberPoints(overallPoints);
             }
             else{
                 Double points  = totalPoints - memberPoints;
-                order.setTotalMemberPoints(points.longValue());
+                overallPoints += (points.longValue() * item.getQuantity());
+                overallGroupPoints += ((totalPoints*item.getQuantity()) - points);
+                order.setTotalMemberPoints(overallPoints);
             }
-
-            order.setTotalGroupPoints(totalPoints - order.getTotalMemberPoints());
+            
+            order.setTotalGroupPoints((double) overallGroupPoints);
             order.setCreateDate(new Date());
             order.setUpdateDate(new Date());
         }

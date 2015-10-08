@@ -112,8 +112,6 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 					}
 					this.create(points);
 				}
-				
-				account.setTotalPoints(account.getTotalPoints() + 1);
 
 				// If currentAccount is already equal to the index of the last account in the list, go back to zero
 				// else continue iterating currentAccount
@@ -132,7 +130,6 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 						account.setIsNext(false);
 					}
 				}
-				accountService.save(account);
 
 				// Create/Update account points
 				Long accountId = account.getId();
@@ -140,7 +137,11 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 				Long pointsForTheDay = pointsValue==null?0:pointsValue;
 				if(pointsForTheDay >= settingsService.findByKey(Settings.SETTINGS_MAXIMUM_POINTS_PER_DAY).getNumberValue()) {
 					accountId = 1l;
+				} else {
+					account.setTotalPoints(account.getTotalPoints() + 1);
 				}
+				
+				accountService.save(account);
 				
 				PointType typeValue = accountId==1l?PointType.GROUP:type;
 				

@@ -161,7 +161,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	public MemberEarning findMemberEarningsByDateByUser(Date date, Long id) {
 		List<Object[]> objs = memberRepository.findMemberEarningsByDateByUser(date, id);
 		if(objs != null && objs.size() > 0) {
-			Long maturityPoints = memberRepository.getMaturityPointsByMemberByDate(id, (Date)(objs.get(0)[6]), (Date)(objs.get(0)[6]));
+			Long maturityPoints = memberRepository.getMaturityPointsByMemberByDate(id, (Date)(objs.get(0)[6]), (Date)(objs.get(0)[7]));
 			Object[] obj = objs.get(0);
 			MemberEarning me = new MemberEarning();
 			me.setMemberId(((BigInteger)obj[0]).longValue());
