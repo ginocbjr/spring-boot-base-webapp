@@ -36,17 +36,17 @@ public class SalesOrderServiceImpl extends BaseServiceImpl<SalesOrder> implement
             if(type.equals(Product.MemberPointsType.PERCENTAGE)){
                 Double points  = totalPoints * (memberPoints / 100);
                 overallPoints += (points.longValue() * item.getQuantity());
-                overallGroupPoints += ((totalPoints*item.getQuantity()) - points);
+                overallGroupPoints += (totalPoints*item.getQuantity());
                 order.setTotalMemberPoints(overallPoints);
             }
             else{
                 Double points  = totalPoints - memberPoints;
                 overallPoints += (points.longValue() * item.getQuantity());
-                overallGroupPoints += ((totalPoints*item.getQuantity()) - points);
+                overallGroupPoints += (totalPoints*item.getQuantity());
                 order.setTotalMemberPoints(overallPoints);
             }
             
-            order.setTotalGroupPoints((double) overallGroupPoints);
+            order.setTotalGroupPoints((double) (overallGroupPoints - overallPoints));
             order.setCreateDate(new Date());
             order.setUpdateDate(new Date());
         }
