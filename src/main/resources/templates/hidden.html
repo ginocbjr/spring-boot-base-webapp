@@ -51,6 +51,14 @@
                         </button>
                     </div>
                 </div>
+                
+                <div class="dbloc-table">
+                    <div>
+                        <button id="submit3" type="button" class="btn gold-button dbloc-add">
+                            Create Accounts
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row" sec:authorize="hasRole('USER')">
@@ -103,6 +111,17 @@
 				success : function(data) {
 					if(data.success == true) {
 						alert("yey!!!")
+					}
+				}
+			});
+		}).on('click','#submit3',function() {
+            var url = window.location.href + '/createAccounts';
+            $.ajax({url : url,
+				type : 'POST',
+				dataType : 'json',
+				success : function(data) {
+					if(data.success == true) {
+						alert("yey!!!!!!!!")
 					}
 				}
 			});

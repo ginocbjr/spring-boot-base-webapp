@@ -66,6 +66,10 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 						Account next = activeList.get(currentAccount);
 						next.setIsNextForGroup(true);
 						this.save(next);
+						
+						if(totalPoints == 1) {
+							account.setIsNextForGroup(false);
+						}
 					} else{
 						if(accountSize > 1){
 							account.setIsNextForGroup(false);

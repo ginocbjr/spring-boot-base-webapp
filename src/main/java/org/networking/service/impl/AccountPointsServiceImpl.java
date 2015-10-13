@@ -121,14 +121,13 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 					currentAccount++;
 				}
 
-				if(i == totalPointsForDistribution) {
-					Account next = accountList.get(currentAccount);
-					next.setIsNext(true);
-					accountService.save(next);
-				} else{
-					if(accountSize > 1){
-						account.setIsNext(false);
+				if(accountSize > 1){
+					if(i == totalPointsForDistribution) {
+						Account next = accountList.get(currentAccount);
+						next.setIsNext(true);
+						accountService.save(next);
 					}
+					account.setIsNext(false);
 				}
 
 				// Create/Update account points
