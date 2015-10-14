@@ -55,7 +55,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 			+ " FROM (SELECT DAYOFWEEK(dt) wkndx FROM (SELECT date(:date) dt) AAAA) AAA) AA) A) M "
 			+ " WHERE DATE(ap.createdate) >= tuesday "
 			+ " AND DATE(ap.createdate) <= monday "
-			+ " AND ap.point_type <> 'MATURITY' "
+			+ " AND ap.point_type = 'REFERRAL' "
 			+ " group by u.id", nativeQuery = true)
 	List<Object[]> findMemberEarningsByDate(@Param(value = "date")Date date);
 	
@@ -73,7 +73,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 			+ " WHERE DATE(ap.createdate) >= tuesday "
 			+ " AND DATE(ap.createdate) <= monday "
 			+ " AND u.id = :id "
-			+ " AND ap.point_type <> 'MATURITY' "
+			+ " AND ap.point_type = 'REFERRAL' "
 			+ " group by u.id", nativeQuery = true)
 	List<Object[]> findMemberEarningsByDateByUser(@Param(value = "date")Date date, @Param(value = "id")Long id);
 
