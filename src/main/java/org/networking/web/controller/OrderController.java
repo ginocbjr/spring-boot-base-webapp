@@ -4,7 +4,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 import org.networking.entity.Member;
 import org.networking.entity.SalesItem;
@@ -13,11 +13,14 @@ import org.networking.repository.SalesOrderRepository;
 import org.networking.service.AccountPointsService;
 import org.networking.service.MemberService;
 import org.networking.service.ProductService;
+import org.networking.service.SalesOrderService;
+import org.networking.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/admin/order")
@@ -69,5 +72,10 @@ public class OrderController extends BaseController<SalesOrder> {
     protected void postCreate(SalesOrder salesOrder) {
         //Create account points for the sales order
         accountPointsService.createForProduct(salesOrder, salesOrder.getOrderDate());
+    }
+    
+    @RequestMapping(value = "/list", produces = {"application/json"})
+    public @ResponseBody List<SalesOrder> list() {
+        return ((SalesOrderService)baseService).getAllOrdersOrderByDate();
     }
 }

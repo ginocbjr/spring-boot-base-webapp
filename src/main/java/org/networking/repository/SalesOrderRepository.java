@@ -1,5 +1,7 @@
 package org.networking.repository;
 
+import java.util.List;
+
 import org.networking.entity.SalesOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,6 +12,9 @@ import org.springframework.data.jpa.repository.Query;
 public interface SalesOrderRepository extends JpaRepository<SalesOrder, Long> {
 	@Query(value = "select sum(total_price) from SALES_ORDER", nativeQuery = true)
 	Long getTotalSales();
+	
+	@Query("select so from SalesOrder so order by so.orderDate desc")
+	List<SalesOrder> getAllOrdersOrderByDate();
 	
 	@Query(value= "select sum(so.total_price) from SALES_ORDER so, "
 			+ " (SELECT start_tuesday + INTERVAL 0 second tuesday, "

@@ -14,7 +14,7 @@ public class DistributeGroupPointsCron {
 	private AccountService accountService;
 	
 	// Run CRON everyday at 11 pm
-	@Scheduled(cron = "0 0 23 * * ?")
+	@Scheduled(cron = "0 59 23 * * ?")
     public void distributeGroupPointsCron() {
 		accountService.distributeGroupPoints(new Date());
     }

@@ -1,10 +1,13 @@
 package org.networking.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.networking.entity.Product;
 import org.networking.entity.SalesItem;
 import org.networking.entity.SalesOrder;
+import org.networking.repository.MemberRepository;
+import org.networking.repository.SalesOrderRepository;
 import org.networking.service.SalesOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,11 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SalesOrderServiceImpl extends BaseServiceImpl<SalesOrder> implements SalesOrderService {
 
-    @Autowired
-    @Override
-    protected void setRepository(JpaRepository<SalesOrder, Long> repository) {
-        this.repository = repository;
-    }
+	private SalesOrderRepository salesOrderRepository;
+	
+	@Autowired
+	@Override
+	protected void setRepository(JpaRepository<SalesOrder, Long> repository) {
+		this.repository = repository;
+		salesOrderRepository = (SalesOrderRepository) repository;
+	}
 
     @Override
     public void setPoints(SalesOrder order){
@@ -51,4 +57,9 @@ public class SalesOrderServiceImpl extends BaseServiceImpl<SalesOrder> implement
             order.setUpdateDate(new Date());
         }
     }
+
+	@Override
+	public List<SalesOrder> getAllOrdersOrderByDate() {
+		return salesOrderRepository.getAllOrdersOrderByDate();
+	}
 }
