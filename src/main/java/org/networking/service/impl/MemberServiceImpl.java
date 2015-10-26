@@ -225,6 +225,11 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	public List<EarningsHistory> findEarningsHistoryPerMember(Long memberId) {
 		return memberRepository.findEarningsHistoryPerMember(memberId);
 	}
+	
+	@Override
+	public List<Member> getAllMembersOrderByDate() {
+		return memberRepository.getAllMembersOrderByDate();
+	}
 
 	@Autowired
 	@Override

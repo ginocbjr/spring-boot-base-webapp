@@ -33,4 +33,6 @@ public interface MemberService extends BaseService<Member> {
 	List<PointsSummaryHelper> findAccountPointsByMember(String username);
 	
 	List<EarningsHistory> findEarningsHistoryPerMember(Long memberId);
+	
+	List<Member> getAllMembersOrderByDate();
 }

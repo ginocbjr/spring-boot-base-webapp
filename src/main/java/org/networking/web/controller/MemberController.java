@@ -11,9 +11,11 @@ import javax.validation.Valid;
 
 import org.networking.entity.Account;
 import org.networking.entity.Member;
+import org.networking.entity.SalesOrder;
 import org.networking.service.AccountPointsService;
 import org.networking.service.AccountService;
 import org.networking.service.MemberService;
+import org.networking.service.SalesOrderService;
 import org.networking.web.validator.MemberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,7 +49,7 @@ public class MemberController extends BaseController<Member> {
 	
 	@RequestMapping(method = {RequestMethod.GET})
 	public String view(Model model) {
-		model.addAttribute("memberList", memberService.findAll());
+		model.addAttribute("memberList", memberService.getAllMembersOrderByDate());
         return "member-list";
 	}
 	
@@ -150,5 +152,10 @@ public class MemberController extends BaseController<Member> {
 		result.put("length", members.size());
 		return result;
 	}
+	
+	@RequestMapping(value = "/list", produces = {"application/json"})
+    public @ResponseBody List<Member> list() {
+        return memberService.getAllMembersOrderByDate();
+    }
 	
 }

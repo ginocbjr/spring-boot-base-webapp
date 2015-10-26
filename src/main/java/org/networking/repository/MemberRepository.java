@@ -15,6 +15,9 @@ import org.springframework.data.repository.query.Param;
  */
 public interface MemberRepository extends JpaRepository<Member, Long> {
 	Member findMemberByUsername(String username);
+	
+	@Query("select m from Member m order by m.createDate")
+	List<Member> getAllMembersOrderByDate();
 
 	@Query("select m from Member m where m.firstName like :keyString or m.lastName like :keyString")
 	List<Member> findByLastnameOrFirstnameLike(@Param(value = "keyString") String keyString);
