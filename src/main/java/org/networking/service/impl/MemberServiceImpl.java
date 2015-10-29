@@ -109,6 +109,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 				accountPointsService.createForReferral(member, accounts, member.getDateJoined());
 			}
 		} else {
+			member.setCreateDate(member.getDateJoined());
 			member.setUpdateDate(new Date());
 		}
 		
