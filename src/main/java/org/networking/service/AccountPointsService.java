@@ -15,6 +15,10 @@ public interface AccountPointsService extends BaseService<AccountPoints> {
 	AccountPoints create(AccountPoints accountPoints);
 
 	List<AccountPoints> findAccountPointsByAccountAndDateAndType(Long accountId, Date date, PointType type);
+	
+	List<AccountPoints> findAccountPointsByType(PointType type);
+	
+	AccountPoints findGroupPointsByDate(Date date);
 
 	List<AccountPoints> findAll();
 

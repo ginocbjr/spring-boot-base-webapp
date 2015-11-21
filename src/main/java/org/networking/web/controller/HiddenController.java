@@ -2,17 +2,22 @@ package org.networking.web.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.networking.entity.Account;
 import org.networking.entity.Member;
+import org.networking.entity.SalesOrder;
 import org.networking.repository.AccountRepository;
 import org.networking.repository.MemberRepository;
 import org.networking.service.AccountPointsService;
 import org.networking.service.AccountService;
 import org.networking.service.MemberService;
+import org.networking.service.SalesItemService;
+import org.networking.service.SalesOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +54,12 @@ public class HiddenController {
 	@Autowired
 	private AccountRepository accountRepository;
 	
+	@Autowired
+	private SalesItemService salesItemService;
+	
+	@Autowired
+	private SalesOrderService salesOrderService;
+	
 	@RequestMapping(method = {RequestMethod.GET})
 	public String view() {
         return "hidden";
@@ -67,8 +78,73 @@ public class HiddenController {
 		return model;
 	}
 	
+	@RequestMapping(value = "/distributeAllGroupPoints", produces = "application/json", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> distributeAllGroupPoints(@RequestParam String date) {
+		Map<String, Object> model = new HashMap<>();
+		try {
+			Calendar start = Calendar.getInstance();
+			start.setTime(dateFormat.parse(date));
+			Calendar end = Calendar.getInstance();
+			end.setTime(new Date());
+
+			for (Date newDate = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), newDate = start.getTime()) {
+				accountService.distributeGroupPoints(newDate);
+			}
+		} catch (ParseException e) {
+			model.put("success", false);
+			return model;
+		}
+		model.put("success", true);
+		return model;
+	}
+	
+	/*@RequestMapping(value = "/updateReferralPoints", produces = "application/json", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> updateReferralPoints() {
+		Map<String, Object> model = new HashMap<>();
+		try {
+			List<AccountPoints> referrals = accountPointsService.findAccountPointsByType(PointType.REFERRAL);
+			if(referrals != null && referrals.size() > 1) {
+				for(AccountPoints referral : referrals) {
+					referral.setPoints(referral.getPoints() + 4);
+					accountPointsService.save(referral);
+					
+					AccountPoints a = accountPointsService.findGroupPointsByDate(referral.getCreateDate());
+					if(a != null) {
+						a.setPoints(a.getPoints() + 4);
+						accountPointsService.save(a);
+					}
+				}
+			}
+		} catch (Exception e) {
+			model.put("success", false);
+			return model;
+		}
+		model.put("success", true);
+		return model;
+	}*/
+	
 	@RequestMapping(value = "/saveEarningsHistoryByDate", produces = "application/json", method = RequestMethod.POST)
 	public @ResponseBody Map<String, Object> saveEarningsHistoryByDate(@RequestParam String date) {
+		
+		/*Map<String, Object> model = new HashMap<>();
+		try {
+			Calendar start = Calendar.getInstance();
+			start.setTime(dateFormat.parse(date));
+			Calendar end = Calendar.getInstance();
+			end.setTime(new Date());
+
+			for (Date newDate = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), newDate = start.getTime()) {
+				if(start.DAY_OF_WEEK == Calendar.MONDAY) {
+					memberService.saveEarningsHistoryByDate(newDate);
+				}
+			}
+		} catch (ParseException e) {
+			model.put("success", false);
+			return model;
+		}
+		model.put("success", true);
+		return model;*/
+		
 		Map<String, Object> model = new HashMap<>();
 		try {
 			memberService.saveEarningsHistoryByDate(dateFormat.parse(date));
@@ -118,9 +194,49 @@ public class HiddenController {
 				}
 		}
 		
-		
-		
 		model.put("success", true);
 		return model;
 	}
+	
+	@RequestMapping(value = "/createProductPoints", produces = "application/json", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> createProductPoints() {
+		Map<String, Object> model = new HashMap<>();
+		try {
+			List<SalesOrder> list = salesOrderService.findAll();
+			for(SalesOrder order : list) {
+				accountPointsService.createForProduct(order, order.getOrderDate());
+			}
+		} catch (Exception e) {
+			model.put("success", false);
+			return model;
+		}
+		model.put("success", true);
+		return model;
+	}
+	
+	/*@RequestMapping(value = "/updateReferralPoints", produces = "application/json", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> updateReferralPoints() {
+		Map<String, Object> model = new HashMap<>();
+		try {
+			List<AccountPoints> referrals = accountPointsService.findAccountPointsByType(PointType.REFERRAL);
+			if(referrals != null && referrals.size() > 1) {
+				for(AccountPoints referral : referrals) {
+					referral.setPoints(referral.getPoints() * 5);
+					accountPointsService.save(referral);
+					
+					AccountPoints a = accountPointsService.findGroupPointsByDate(referral.getCreateDate());
+					if(a != null) {
+						a.setPoints(a.getPoints() + (referral.getPoints() * 4));
+						accountPointsService.save(a);
+					}
+				}
+			}
+		} catch (Exception e) {
+			model.put("success", false);
+			return model;
+		}
+		model.put("success", true);
+		return model;
+	}*/
 }
+	

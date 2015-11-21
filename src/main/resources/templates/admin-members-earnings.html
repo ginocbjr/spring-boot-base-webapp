@@ -51,7 +51,7 @@
 	                            	<td th:text="${currentEarning.endDateDisplay}"></td>
 	                            	<td th:text="${currentEarning.totalPoints}"></td>
 	                            	<td>
-	                            		<div class="bold" style="font-size: 1.25em">Php <span th:text="${multiplier * currentEarning.totalPoints}"></span></div>
+	                            		<div class="bold" style="font-size: 1.25em">Php <span th:text="${multiplier * ((currentEarning.totalPoints)/5)}"></span></div>
 	                            		<div th:if="${currentEarning.maturityPoints > 0}">
 	                            			<span class="label label-success" style="font-size: 1em">
 	                            				+<span th:text="${currentEarning.maturityPoints}"></span> Maturity Incentive
@@ -85,7 +85,7 @@
 	                                <td th:text="${record.endDateDisplay}"></td>
 	                                <td th:text="${record.totalPoints}"></td>
 	                                <td>
-	                                	<div class="bold" style="font-size: 1.25em">Php <span th:text="${multiplier * record.totalPoints}"></span></div>
+	                                	<div class="bold" style="font-size: 1.25em">Php <span th:text="${multiplier * ((record.totalPoints)/5)}"></span></div>
 	                            		<div th:if="${record.maturityPoints > 0}">
 	                            			<span class="label label-success" style="font-size: 1em">
 	                            				+<span th:text="${record.maturityPoints}"></span> Maturity Incentive

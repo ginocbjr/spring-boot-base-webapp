@@ -62,4 +62,9 @@ public class SalesOrderServiceImpl extends BaseServiceImpl<SalesOrder> implement
 	public List<SalesOrder> getAllOrdersOrderByDate() {
 		return salesOrderRepository.getAllOrdersOrderByDate();
 	}
+
+	@Override
+	public List<SalesOrder> findAll() {
+		return salesOrderRepository.findAll();
+	}
 }

@@ -152,7 +152,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 					(Date)obj[2], (Date)obj[3]);
 			earningsHistoryService.createEarningsHistory(this.load(((BigInteger)obj[0]).longValue()),
 					((Double)obj[1]).longValue(),
-					((Double)obj[1]) * settingsService.findByKey(Settings.SETTINGS_EARNINGS_PER_POINT).getNumberValue(),
+					(((Double)obj[1])/5) * settingsService.findByKey(Settings.SETTINGS_EARNINGS_PER_POINT).getNumberValue(),
 					(Date)obj[2],
 					(Date)obj[3], maturityPoints);
 		}

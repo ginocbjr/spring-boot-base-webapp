@@ -37,7 +37,7 @@
                 
                 <div class="dbloc-table">
                 	<div class="form-group">
-                    	<label class="control-label col-xs-4">Date</label>
+                    	<label class="control-label col-xs-4">Start Date</label>
 		                <div class="input-group date-group date col-xs-8">
 		                    <input type="text" id="weeklyEarningsDate"  class="form-control" />
 		                    <span class="input-group-addon calendar-button">
@@ -56,6 +56,22 @@
                     <div>
                         <button id="submit3" type="button" class="btn gold-button dbloc-add">
                             Create Accounts
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="dbloc-table">
+                    <div>
+                        <button id="submit4" type="button" class="btn gold-button dbloc-add">
+                            Create Product Points
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="dbloc-table">
+                    <div>
+                        <button id="submit5" type="button" class="btn gold-button dbloc-add">
+                            Distribute All Group Points
                         </button>
                     </div>
                 </div>
@@ -122,6 +138,31 @@
 				success : function(data) {
 					if(data.success == true) {
 						alert("yey!!!!!!!!")
+					}
+				}
+			});
+		}).on('click','#submit4',function() {
+            var url = window.location.href + '/createProductPoints';
+            $.ajax({url : url,
+				type : 'POST',
+				dataType : 'json',
+				success : function(data) {
+					if(data.success == true) {
+						alert("created wieee!!!!!!!!")
+					}
+				}
+			});
+		}).on('click','#submit5',function() {
+            var url = window.location.href + '/distributeAllGroupPoints';
+            $.ajax({url : url,
+				type : 'POST',
+				dataType : 'json',
+				data : {
+					date : $('#groupPointDate').val()
+				},
+				success : function(data) {
+					if(data.success == true) {
+						alert("distributed wieee!!!!!!!!")
 					}
 				}
 			});

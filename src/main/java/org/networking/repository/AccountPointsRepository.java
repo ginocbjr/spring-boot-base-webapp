@@ -18,6 +18,12 @@ public interface AccountPointsRepository extends JpaRepository<AccountPoints, Lo
 	List<AccountPoints> findAccountPointsByAccountAndDateAndType(@Param(value = "accountId") Long accountId, @Param(value = "date") Date date,
 			@Param(value = "type") PointType type);
 	
+	@Query("select a from AccountPoints a where a.pointType = :type")
+	List<AccountPoints> findAccountPointsByType(@Param(value = "type") PointType type);
+	
+	@Query("select a from AccountPoints a where a.account.id = 1 and a.pointType = 'GROUP' and date(a.createDate) = date(:date)")
+	AccountPoints findGroupPointsByDate(@Param(value = "date") Date date);
+	
 	@Query(value = "select sum(ap.points) from ACCOUNT_POINTS ap "
 			+ " join ACCOUNT a on ap.account_id = a.id "
 			+ " join USER u on u.id = a.member_id where a.member_id = :memberId "

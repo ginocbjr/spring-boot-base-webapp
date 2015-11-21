@@ -13,4 +13,6 @@ public interface SalesOrderService extends BaseService<SalesOrder> {
     
     List<SalesOrder> getAllOrdersOrderByDate();
 
+	List<SalesOrder> findAll();
+
 }

@@ -46,6 +46,16 @@ public class AccountPointsServiceImpl extends BaseServiceImpl<AccountPoints> imp
 	}
 	
 	@Override
+	public List<AccountPoints> findAccountPointsByType(PointType type) {
+		return accountPointsRepository.findAccountPointsByType(type);
+	}
+
+	@Override
+	public AccountPoints findGroupPointsByDate(Date date) {
+		return accountPointsRepository.findGroupPointsByDate(date);
+	}
+	
+	@Override
 	public List<AccountPoints> findAll() {
 		return accountPointsRepository.findAll();
 	}
