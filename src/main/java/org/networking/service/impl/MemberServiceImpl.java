@@ -138,11 +138,11 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 		return memberRepository.findByLastnameOrFirstnameLike("%" + keyString + "%");
 	}
 	
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<Member> findWithUnclaimed(Date date) {
 		return memberRepository.findWithUnclaimed(date);
-	}
+	}*/
 
 	@Override
 	public void saveEarningsHistoryByDate(Date date) {

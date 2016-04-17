@@ -22,7 +22,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query("select m from Member m where m.firstName like :keyString or m.lastName like :keyString")
 	List<Member> findByLastnameOrFirstnameLike(@Param(value = "keyString") String keyString);
 
-	@Query("select m from Member m where m.id in " +
+	/*@Query("select m from Member m where m.id in " +
 			"(select distinct a.memberId from Account a where a.id in " +
 			"(select ap.accountId from AccountPoints ap where (ap.isClaimed is null or ap.isClaimed = false) and DATE(ap.createDate) = DATE(:date) ))")
 	List<Member> findWithUnclaimed(@Param(value = "date")Date date);
@@ -30,7 +30,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query("select m from Member m where m.id in " +
 			"(select distinct a.memberId from Account a where a.id in " +
 			"(select ap.accountId from AccountPoints ap where DATE(ap.createDate) = DATE(:date) ))")
-	List<Member> findWithAccountPointsForDate(@Param(value = "date")Date date);
+	List<Member> findWithAccountPointsForDate(@Param(value = "date")Date date);*/
 
 	/*@Query(value = "select u.id as memberId, u.FIRST_NAME as firstName, u.LAST_NAME as lastName, u.MIDDLE_NAME as middleName, t4.total_points as totalPoints, \n" +
 			"case when eh.DATE_CLAIMED is null then false else true end as isClaimed\n" +
@@ -46,45 +46,42 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 			"left join EARNINGS_HISTORY eh on eh.MEMBER_ID = u.id", nativeQuery = true)*/
 	
 	// Returns earnings for the week (cut off is from Tuesday to Monday) of all users
-	@Query(value = "SELECT u.id as memberId, "
-			+ " sum(ap.points) as totalPoints, tuesday, monday "
-			+ " from ACCOUNT_POINTS ap "
-			+ " join ACCOUNT a on a.id = ap.account_id "
-			+ " join USER u on u.id = a.member_id, "
-			+ " (SELECT start_tuesday + INTERVAL 0 second tuesday, "
-			+ " start_tuesday + INTERVAL 604799 second monday "
-			+ " FROM (SELECT (date(:date) - INTERVAL daysbacktotuesday DAY) start_tuesday "
-			+ " FROM (SELECT SUBSTR('5601234',wkndx,1) daysbacktotuesday "
-			+ " FROM (SELECT DAYOFWEEK(dt) wkndx FROM (SELECT date(:date) dt) AAAA) AAA) AA) A) M "
-			+ " WHERE DATE(ap.createdate) >= tuesday "
-			+ " AND DATE(ap.createdate) <= monday "
-			+ " AND ap.point_type = 'REFERRAL' "
+	@Query(value = " SELECT u.ID as memberId, u.FIRST_NAME as firstName, u.LAST_NAME as lastName, u.MIDDLE_NAME as middleName,"
+			+ "			IFNULL(sum(mep.POINTS),0) as totalPoints, mep.IS_CLAIMED as isClaimed, tuesday, monday"
+			+ "			from MEMBER_EARNINGS_POINTS mep"
+			+ "			join USER u on u.ID = mep.MEMBER_ID,"
+			+ "			(SELECT start_tuesday + INTERVAL 0 second tuesday,"
+			+ "			start_tuesday + INTERVAL 604799 second monday"
+			+ "			FROM (SELECT (date(:date) - INTERVAL daysbacktotuesday DAY) start_tuesday"
+			+ "			FROM (SELECT SUBSTR('5601234',wkndx,1) daysbacktotuesday"
+			+ "			FROM (SELECT DAYOFWEEK(dt) wkndx FROM (SELECT date(:date) dt) AAAA) AAA) AA) A) M"
+			+ "			WHERE DATE(mep.createdate) >= tuesday"
+			+ "			AND DATE(mep.createdate) <= monday"
+			+ "			AND mep.point_type = 'REFERRAL'"
 			+ " group by u.id", nativeQuery = true)
 	List<Object[]> findMemberEarningsByDate(@Param(value = "date")Date date);
 	
 	// Returns earnings for the week (cut off is from Tuesday to Monday) of a specific user
-	@Query(value = "SELECT u.id as memberId, u.FIRST_NAME as firstName, u.LAST_NAME as lastName, u.MIDDLE_NAME as middleName, "
-			+ " sum(ap.points) as totalPoints, ap.IS_CLAIMED as isClaimed, tuesday, monday "
-			+ " from ACCOUNT_POINTS ap "
-			+ " join ACCOUNT a on a.id = ap.account_id "
-			+ " join USER u on u.id = a.member_id, "
-			+ " (SELECT start_tuesday + INTERVAL 0 second tuesday, "
-			+ " start_tuesday + INTERVAL 604799 second monday "
-			+ " FROM (SELECT (date(:date) - INTERVAL daysbacktotuesday DAY) start_tuesday "
-			+ " FROM (SELECT SUBSTR('5601234',wkndx,1) daysbacktotuesday "
-			+ " FROM (SELECT DAYOFWEEK(dt) wkndx FROM (SELECT date(:date) dt) AAAA) AAA) AA) A) M "
-			+ " WHERE DATE(ap.createdate) >= tuesday "
-			+ " AND DATE(ap.createdate) <= monday "
-			+ " AND u.id = :id "
-			+ " AND ap.point_type = 'REFERRAL' "
-			+ " group by u.id", nativeQuery = true)
+	@Query(value = " SELECT u.ID as memberId, u.FIRST_NAME as firstName, u.LAST_NAME as lastName, u.MIDDLE_NAME as middleName,"
+			+ "			IFNULL(sum(mep.POINTS),0) as totalPoints, mep.IS_CLAIMED as isClaimed, tuesday, monday"
+			+ "			from MEMBER_EARNINGS_POINTS mep"
+			+ "			join USER u on u.ID = mep.MEMBER_ID,"
+			+ "			(SELECT start_tuesday + INTERVAL 0 second tuesday,"
+			+ "			start_tuesday + INTERVAL 604799 second monday"
+			+ "			FROM (SELECT (date(:date) - INTERVAL daysbacktotuesday DAY) start_tuesday"
+			+ "			FROM (SELECT SUBSTR('5601234',wkndx,1) daysbacktotuesday"
+			+ "			FROM (SELECT DAYOFWEEK(dt) wkndx FROM (SELECT date(:date) dt) AAAA) AAA) AA) A) M"
+			+ "			WHERE DATE(mep.createdate) >= tuesday"
+			+ "			AND DATE(mep.createdate) <= monday"
+			+ "			AND u.id = :id AND mep.point_type = 'REFERRAL'"
+			+ " group by u.ID", nativeQuery = true)
 	List<Object[]> findMemberEarningsByDateByUser(@Param(value = "date")Date date, @Param(value = "id")Long id);
 
 	@Modifying
-	@Query(value = "update ACCOUNT_POINTS ap \n" +
-			"set ap.IS_CLAIMED = true, ap.DATE_CLAIMED = now() \n" +
-			"where ap.account_id in (select id from ACCOUNT where MEMBER_ID = :memberId) \n" +
-			"and date(ap.CREATEDATE) >= date(:startDate) and date(ap.CREATEDATE) <= date(:endDate)", nativeQuery = true)
+	@Query(value = "update MEMBER_EARNINGS_POINTS mep \n" +
+			"set mep.IS_CLAIMED = true, mep.DATE_CLAIMED = now() \n" +
+			"where mep.MEMBER_ID = :memberId \n" +
+			"and date(mep.CREATEDATE) >= date(:startDate) and date(mep.CREATEDATE) <= date(:endDate)", nativeQuery = true)
 	void updateAccountPointsAsClaimed(@Param(value = "memberId") Long memberId, @Param(value = "startDate") Date startDate, @Param(value = "endDate") Date endDate);
 	
 	@Query(value = "select concat(t.username,'-',@curRow \\:= @curRow + 1) as accountName, "
@@ -105,12 +102,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query("select e from EarningsHistory e where e.memberId = :memberId order by e.startDate desc")
 	List<EarningsHistory> findEarningsHistoryPerMember(@Param(value = "memberId") Long memberId);
 	
-	@Query(value="SELECT if(sum(ap.points) is null, 0, sum(ap.points)) as totalPoints "
-			+ " from ACCOUNT_POINTS ap "
-			+ " join ACCOUNT a on a.id = ap.account_id "
-			+ " WHERE a.member_id = :memberId "
-			+ " AND date(ap.createdate) >= date(:startDate) "
-			+ " AND date(ap.createdate) <= date(:endDate) "
-			+ " AND ap.point_type = 'MATURITY'", nativeQuery = true)
+	@Query(value="SELECT if(sum(mep.POINTS) is null, 0, sum(mep.POINTS)) as totalPoints "
+			+ " from MEMBER_EARNINGS_POINTS mep "
+			+ " left join USER m on m.ID = mep.MEMBER_ID "
+			+ " WHERE m.ID = :memberId "
+			+ " AND date(mep.createdate) >= date(:startDate) "
+			+ " AND date(mep.createdate) <= date(:endDate) "
+			+ " AND mep.POINT_TYPE = 'MATURITY'", nativeQuery = true)
 	Long getMaturityPointsByMemberByDate(@Param(value = "memberId") Long memberId, @Param(value = "startDate") Date startDate, @Param(value = "endDate") Date endDate);
 }

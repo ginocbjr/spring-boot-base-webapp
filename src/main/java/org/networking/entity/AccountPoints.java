@@ -25,13 +25,9 @@ public class AccountPoints extends BaseEntity{
 	@Column(name="POINT_TYPE")
 	@Enumerated(EnumType.STRING)
 	private PointType pointType;
-
+	
 	@Column(name = "IS_CLAIMED")
 	private Boolean isClaimed = Boolean.FALSE;
-
-	@Column(name = "DATE_CLAIMED")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dateClaimed;
 
 	public Double getPoints() {
 		return points;
@@ -57,27 +53,19 @@ public class AccountPoints extends BaseEntity{
 		this.account = account;
 	}
 
-	public Boolean getIsClaimed() {
-		return isClaimed;
-	}
-
-	public void setIsClaimed(Boolean isClaimed) {
-		this.isClaimed = isClaimed;
-	}
-
-	public Date getDateClaimed() {
-		return dateClaimed;
-	}
-
-	public void setDateClaimed(Date dateClaimed) {
-		this.dateClaimed = dateClaimed;
-	}
-
 	public Long getAccountId() {
 		return accountId;
 	}
 
 	public void setAccountId(Long accountId) {
 		this.accountId = accountId;
+	}
+
+	public Boolean getIsClaimed() {
+		return isClaimed;
+	}
+
+	public void setIsClaimed(Boolean isClaimed) {
+		this.isClaimed = isClaimed;
 	}
 }

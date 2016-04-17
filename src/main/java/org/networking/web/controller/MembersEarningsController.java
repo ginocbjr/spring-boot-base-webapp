@@ -55,11 +55,12 @@ public class MembersEarningsController {
 		Map<String, Object> model = new HashMap<>();
 		EarningsHistory eh = earningsHistoryService.load(id);
 		
-		// Update AccountPoints isClaimed = true
+		// Update Member Earnings Points isClaimed = true
 		memberService.markEarningsAsClaimed(eh.getMemberId(), eh.getTotalPoints(), eh.getTotalEarnings(), eh.getStartDate(), eh.getEndDate());
 		
 		// Update EarningsHistory isClaimed = true
 		eh.setIsClaimed(Boolean.TRUE);
+		eh.setDateClaimed(new Date());
 		earningsHistoryService.save(eh);
 		model.put("success", true);
 		return model;

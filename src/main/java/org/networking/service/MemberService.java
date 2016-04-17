@@ -22,7 +22,7 @@ public interface MemberService extends BaseService<Member> {
 
 	List<Member> findByLastnameOrFirstnameLike(String keyString);
 
-	List<Member> findWithUnclaimed(Date date);
+	//List<Member> findWithUnclaimed(Date date);
 
 	void saveEarningsHistoryByDate(Date date);
 	

@@ -21,12 +21,12 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 	
 	@Query(value="select sum(ap.points) from ACCOUNT_POINTS ap "
 			+ " where ap.account_id in (select a.id from ACCOUNT a where a.member_id = 1) "
-			+ " and date(ap.createdate) = date(:date)",nativeQuery = true)
+			+ " and date(ap.createdate) <= date(:date) and (ap.IS_CLAIMED IS NULL OR ap.IS_CLAIMED = 0)",nativeQuery = true)
 	Long totalPointsForDistribution(@Param(value = "date")Date date);
 	
 	@Modifying
 	@Query(value="update ACCOUNT_POINTS ap set ap.is_claimed = true "
 			+ " where ap.account_id in (select a.id from ACCOUNT a where a.member_id = 1) "
-			+ " and date(ap.createdate) = date(:date)",nativeQuery = true)
+			+ " and date(ap.createdate) <= date(:date)",nativeQuery = true)
 	void markGroupPointsAsDistributed(@Param(value = "date")Date date);
 }
